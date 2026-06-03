@@ -9,7 +9,11 @@ class NeuroLoopApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Container(),
+      home: Scaffold(
+        body: Container(
+          child: Center(child: Text('NeuroLoop')),
+        ),
+      ),
     );
   }
 

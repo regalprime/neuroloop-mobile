@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:neuroloop/app/app.dart';
+import 'package:neuroloop/app/flavor.dart';
 
 void main() {
-  runApp(const NeuroLoopApp());
+  const flavor = Flavor.prod;
+  runApp(const NeuroLoopApp(flavor: flavor));
 }
 
-class NeuroLoopApp extends StatelessWidget {
-  const NeuroLoopApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
