@@ -1,0 +1,8 @@
+{
+  "appName": "NeuroLoop",
+  "startFocus": "Start Focus",
+  "stopFocus": "Stop",
+  "dashboard": "Dashboard",
+  "todayFocus": "Today Focus Time",
+  "recentSessions": "Recent Sessions"
+}

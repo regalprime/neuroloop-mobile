@@ -15,7 +15,25 @@ class ThemeRegistry {
 
   static final ThemeRegistry instance = ThemeRegistry._();
 
+  late final AppTheme _fallback = _buildFallback();
+
+
+
   late final Map<AppThemeId, AppTheme> _registry = _buildAll();
+
+  AppTheme _buildFallback() {
+    final spacing = const DefaultSpacingTokens();
+    final motion = const DefaultMotionTokens();
+    final typo = const DefaultTypographyTokens();
+
+    return AppThemeBuilder.build(
+      id: AppThemeId.lightDefault,
+      colors: const LightColorTokens(),
+      typography: typo,
+      spacing: spacing,
+      motion: motion,
+    );
+  }
 
   Map<AppThemeId, AppTheme> _buildAll() {
     final spacing = const DefaultSpacingTokens();
@@ -84,9 +102,12 @@ class ThemeRegistry {
   }
 
   AppTheme get(AppThemeId id) {
-    final theme = _registry[id];
-    assert(theme != null, 'koking');
-    return theme!;
+    return _registry[id] ?? _fallback;
+  }
+
+  AppTheme safeGet(AppThemeId? id) {
+    if (id == null) return _fallback;
+    return _registry[id] ?? _fallback;
   }
 
   AppTheme resolveForSystem(Brightness systemBrightness) =>

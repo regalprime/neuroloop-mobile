@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../bloc/theme/theme_bloc.dart';
 import '../../data/theme_repository.dart';
@@ -33,6 +34,12 @@ class _AppView extends StatelessWidget {
       buildWhen: (p, c) =>
           p.flutterThemeMode != c.flutterThemeMode || p.lightTheme != c.lightTheme || p.darkTheme != c.darkTheme,
       builder: (context, state) {
+        final registry = ThemeRegistry.instance;
+
+        final light = state.lightTheme ?? registry.get(AppThemeId.lightDefault).themeData;
+
+        final dark = state.darkTheme ?? registry.get(AppThemeId.darkDefault).themeData;
+
         if (!state.isLoaded) {
           return MaterialApp(
               home: Scaffold(
@@ -43,12 +50,14 @@ class _AppView extends StatelessWidget {
           )));
         }
         return MaterialApp.router(
-          theme: state.lightTheme,
-          darkTheme: state.darkTheme,
+          theme: light,
+          darkTheme: dark,
           themeMode: state.flutterThemeMode,
           themeAnimationDuration: const Duration(milliseconds: 300),
           themeAnimationCurve: Curves.easeInOut,
           routerConfig: AppRouter.config,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
         );
       },
     );
