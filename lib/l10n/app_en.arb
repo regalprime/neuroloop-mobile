@@ -4,5 +4,6 @@
   "stopFocus": "Stop",
   "dashboard": "Dashboard",
   "todayFocus": "Today Focus Time",
-  "recentSessions": "Recent Sessions"
+  "recentSessions": "Recent Sessions",
+  "hello": "Hello"
 }
