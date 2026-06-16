@@ -109,11 +109,9 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
     return ext!;
   }
 
-  factory AppThemeExtension.fromTokens(
-    ColorTokens c,
-    SpacingTokens s,
-    MotionTokens m,
-  ) =>
+  factory AppThemeExtension.fromTokens(ColorTokens c,
+      SpacingTokens s,
+      MotionTokens m,) =>
       AppThemeExtension(
         // Semantic
         semanticSuccess: c.semanticSuccess,

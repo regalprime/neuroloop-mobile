@@ -14,6 +14,7 @@ class Dashboard extends StatelessWidget {
         child: Column(
           children: [
             _userProfile,
+            _digitalHealthScore,
           ],
         ),
       ),
