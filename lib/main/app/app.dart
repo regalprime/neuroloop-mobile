@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:neuroloop/core/router/app_router.dart';
 
 import '../../bloc/theme/theme_bloc.dart';
 import '../../data/theme_repository.dart';
 import '../../domain/app_theme_id.dart';
 import '../../registry/theme_registry.dart';
-import '../../router/app_router.dart';
 import 'flavor.dart';
 
 class NeuroLoopApp extends StatelessWidget {

@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
-
-import '../presentations/theme_picker_screen.dart';
+import 'package:neuroloop/presentations/theme_picker_screen.dart';
 
 class AppRouter {
   AppRouter._();
