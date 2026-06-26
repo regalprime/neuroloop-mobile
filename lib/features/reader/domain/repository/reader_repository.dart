@@ -1,1 +1,1 @@
-readd
+class ReaderRepository {}

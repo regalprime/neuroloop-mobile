@@ -6,17 +6,12 @@ class Dashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _userProfile = Container(
-      child: Text(context.l10n.hello),
-    );
+    final userProfile = Text(context.l10n.hello);
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            _userProfile,
-            _digitalHealthScore,
-          ],
-        ),
+      body: Column(
+        children: [
+          userProfile,
+        ],
       ),
     );
   }
