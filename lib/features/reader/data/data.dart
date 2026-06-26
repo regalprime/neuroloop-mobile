@@ -1,1 +1,1 @@
-ta mang
+class Data {}

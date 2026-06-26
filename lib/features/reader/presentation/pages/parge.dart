@@ -1,1 +1,1 @@
-15
+class Parge {}
