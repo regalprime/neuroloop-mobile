@@ -1,5 +1,8 @@
 import 'package:go_router/go_router.dart';
-import 'package:neuroloop/presentations/theme_picker_screen.dart';
+import 'package:neuroloop/presentations/home_screen.dart';
+
+import '../../features/reader/presentation/pages/reader_view.dart';
+import '../../features/reader/presentation/providers/reader_scope.dart';
 
 class AppRouter {
   AppRouter._();
@@ -9,11 +12,13 @@ class AppRouter {
     routes: [
       GoRoute(
         path: '/',
-        builder: (_, __) => const ThemePickerScreen(),
+        builder: (_, __) => const HomeScreen(),
       ),
       GoRoute(
-        path: '/settings/theme',
-        builder: (_, __) => const ThemePickerScreen(),
+        path: '/reader',
+        builder: (_, __) => const ReaderScope(
+          child: ReaderView(),
+        ),
       ),
     ],
   );

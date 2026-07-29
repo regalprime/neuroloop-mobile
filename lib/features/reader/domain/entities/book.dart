@@ -1,8 +1,18 @@
-import 'package:neuroloop/features/reader/domain/entities/book_block.dart';
+import 'book_content.dart';
+import 'book_metadata.dart';
+import 'book_resources.dart';
+import 'reading_progress.dart';
 
 class Book {
-  final String bookId;
-  final String bookTitle;
-  final List<BookBlock> blocks;
-  const Book({required this.bookId, required this.bookTitle, required this.blocks});  
+  final BookMetadata metadata;
+  final BookContent content;
+  final ReadingProgress progress;
+  final BookResources resources;
+
+  const Book({
+    required this.metadata,
+    required this.content,
+    required this.progress,
+    required this.resources,
+  });
 }

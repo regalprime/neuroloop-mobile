@@ -4,5 +4,4 @@ import '../entities/book.dart';
 
 abstract interface class ReaderRepository {
   Future<Book> importBook(File file);
-  Future<List<Book>> getBookList();
 }

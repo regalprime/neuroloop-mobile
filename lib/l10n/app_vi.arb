@@ -5,5 +5,7 @@
   "dashboard": "Bảng điều khiển",
   "todayFocus": "Thời gian tập trung hôm nay",
   "recentSessions": "Phiên gần đây",
-  "hello": "Xin chào"
+  "hello": "Xin chào",
+  "import": "Nhập",
+  "noBooksAvailable": "Không có sách nào."
 }

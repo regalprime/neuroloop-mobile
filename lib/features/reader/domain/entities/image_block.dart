@@ -1,7 +1,16 @@
 part of 'book_block.dart';
-final class ImageBlock extends BookBlock{
-    final String path;
-    final double? width;
-    final double? height;
-    const ImageBlock({required this.path, this.width, this.height});
+
+final class ImageBlock extends BookBlock {
+  final String imagePath;
+
+  final double? width;
+
+  final double? height;
+
+  const ImageBlock({
+    required super.id,
+    required this.imagePath,
+    this.width,
+    this.height,
+  });
 }

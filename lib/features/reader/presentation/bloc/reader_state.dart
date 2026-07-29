@@ -1,16 +1,25 @@
-import 'package:neuroloop/features/reader/domain/entities/book.dart';
+part of 'reader_bloc.dart';
 
 sealed class ReaderState {
   const ReaderState();
 }
 
-class ReaderInitial extends ReaderState {}
+class ReaderInitial extends ReaderState {
+  const ReaderInitial();
+}
 
-class ReaderLoading extends ReaderState {}
+class ReaderLoading extends ReaderState {
+  const ReaderLoading();
+}
 
-class ReaderLoaded extends ReaderState {
+class ImportBookLoaded extends ReaderState {
   final Book book;
-  const ReaderLoaded({required this.book});
+  const ImportBookLoaded({required this.book});
+}
+
+class BookListLoaded extends ReaderState {
+  final List<Book> books;
+  const BookListLoaded({required this.books});
 }
 
 class ReaderFailure extends ReaderState {

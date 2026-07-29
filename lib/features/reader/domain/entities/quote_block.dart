@@ -1,9 +1,9 @@
 part of 'book_block.dart';
 
-final class TextBlock extends BookBlock {
+final class QuoteBlock extends BookBlock {
   final String text;
 
-  const TextBlock({
+  const QuoteBlock({
     required super.id,
     required this.text,
   });
