@@ -1,18 +1,7 @@
-[tools]
-flutter = "3.35.1"
-
 [tasks.dev]
 description = "Run Flutter (dev flavor)"
-run = """
-flutter run \
-  --flavor dev \
-  -t lib/main_dev.dart
-"""
+run = "flutter run --flavor dev -t lib/main/main_dev.dart"
 
 [tasks.prod]
 description = "Run Flutter (prod flavor)"
-run = """
-flutter run \
-  --flavor prod \
-  -t lib/main_prod.dart
-"""
+run = "flutter run --flavor prod -t lib/main/main_prod.dart"

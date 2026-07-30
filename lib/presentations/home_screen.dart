@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/reader/presentation/pages/reader_view.dart';
+import '../features/reader/presentation/providers/reader_scope.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -13,7 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late final List<Widget> _pages = [
     const _DashboardTab(),
-    const _LibraryTab(),
+    const ReaderScope(
+      child: ReaderView(),
+    ),
     const _SettingsTab(),
   ];
 
@@ -78,12 +83,6 @@ class _LibraryTab extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Library'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.push('/reader');
-        },
-        child: const Icon(Icons.add),
       ),
       body: Center(
         child: ElevatedButton(

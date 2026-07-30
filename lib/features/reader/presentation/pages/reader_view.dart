@@ -18,7 +18,6 @@ class _ReaderViewState extends State<ReaderView> {
   @override
   void initState() {
     super.initState();
-    // Load initial book list when the view is created
     context.read<ReaderBloc>().add(GetBookListRequest());
   }
 
