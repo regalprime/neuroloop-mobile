@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neuroloop/features/reader/domain/usecases/import_book_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/get_book_list_usecase.dart';
+import 'package:neuroloop/features/reader/domain/usecases/import_book_usecase.dart';
 
 import '../../domain/entities/book.dart';
+
 part 'reader_event.dart';
 part 'reader_state.dart';
 
@@ -26,8 +27,10 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> {
   ) async {
     emit(const ReaderLoading());
     try {
-      final book = await importBookUseCase(event.file);
-      emit(ImportBookLoaded(book: book));
+      await importBookUseCase(event.file);
+
+      final books = await getBookListUseCase();
+      emit(ImportBookLoaded(book: books));
     } catch (e) {
       emit(ReaderFailure(message: e.toString()));
     }

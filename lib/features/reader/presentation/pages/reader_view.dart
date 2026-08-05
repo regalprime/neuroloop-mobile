@@ -41,7 +41,7 @@ class _ReaderViewState extends State<ReaderView> {
   Future<void> _pickAndImportBook() async {
     final result = await FilePicker.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['pdf', 'epub', 'txt'], // adjust as needed
+      allowedExtensions: ['pdf', 'epub', 'txt'],
     );
 
     if (result != null && result.files.isNotEmpty) {
@@ -82,8 +82,8 @@ class _ReaderViewState extends State<ReaderView> {
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 child: ListTile(
                   leading: const Icon(Icons.menu_book),
-                  title: Text(book.metadata.title),
-                  subtitle: Text('ID: ddd'),
+                  title: Text(book.name),
+                  subtitle: Text('ID: ${book.id}'),
                 ),
               );
             },
@@ -109,7 +109,9 @@ class _ReaderViewState extends State<ReaderView> {
       child: Column(
         children: [
           _importButton(text: context.l10n.import),
-          _bookList(),
+          Expanded(
+            child: _bookList(),
+          ),
         ],
       ),
     );

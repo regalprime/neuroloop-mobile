@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:neuroloop/core/storage/app_storage.dart';
 import 'package:neuroloop/features/reader/domain/repository/reader_repository.dart';
 import 'package:neuroloop/features/reader/domain/usecases/get_book_list_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/import_book_usecase.dart';
@@ -20,30 +21,37 @@ void configureThemeModule() {}
 
 void configureReaderModule() {
   // final resolver = DocumentTypeResolver();
-  getIt.registerLazySingleton<DocumentTypeResolver>(() => const DocumentTypeResolver());
+  getIt.registerLazySingleton<DocumentTypeResolver>(
+      () => const DocumentTypeResolver());
 
-  getIt.registerLazySingleton<PdfParser>(
-    () => const PdfParser(),
-  );
+  // getIt.registerLazySingleton<PdfParser>(
+  //   () => const PdfParser(),
+  // );
 
-  getIt.registerLazySingleton<DocumentParserFactory>(
-    () => DocumentParserFactory(
-      resolver: getIt(),
-      parsers: [
-        getIt<PdfParser>(),
-      ],
-    ),
+  // getIt.registerLazySingleton<DocumentParserFactory>(
+  //   () => DocumentParserFactory(
+  //     resolver: getIt(),
+  //     parsers: [
+  //       getIt<PdfParser>(),
+  //     ],
+  //   ),
+  // );
+  
+  getIt.registerLazySingleton<AppStorage>(
+    () => const AppStorage(),
   );
 
   getIt.registerLazySingleton<ReaderRepository>(
-    () => ReaderRepositoryImpl(parserFactory: getIt()),
+    () => ReaderRepositoryImpl(storage: getIt()),
   );
 
   getIt.registerFactory<ImportBookUseCase>(
     () => ImportBookUseCase(readerRepository: getIt()),
   );
 
-  getIt.registerFactory<GetBookListUseCase>(() => GetBookListUseCase(readerRepository: getIt()));
+  getIt.registerFactory<GetBookListUseCase>(
+      () => GetBookListUseCase(readerRepository: getIt()));
 
-  getIt.registerFactory<ReaderBloc>(() => ReaderBloc(importBookUseCase: getIt(), getBookListUseCase: getIt()));
+  getIt.registerFactory<ReaderBloc>(() =>
+      ReaderBloc(importBookUseCase: getIt(), getBookListUseCase: getIt()));
 }

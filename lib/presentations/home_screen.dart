@@ -75,26 +75,7 @@ class _DashboardTab extends StatelessWidget {
   }
 }
 
-class _LibraryTab extends StatelessWidget {
-  const _LibraryTab();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Library'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            context.push('/reader');
-          },
-          child: const Text('Import Book'),
-        ),
-      ),
-    );
-  }
-}
 
 class _SettingsTab extends StatelessWidget {
   const _SettingsTab();
