@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neuroloop/features/reader/domain/usecases/get_book_list_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/import_book_usecase.dart';
@@ -16,36 +18,36 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> {
   ReaderBloc({
     required this.importBookUseCase,
     required this.getBookListUseCase,
-  }) : super(const ReaderInitial()) {
-    on<ImportBookRequest>(_onImportPdf);
-    on<GetBookListRequest>(_onGetBookList);
+  }) : super(const ReaderState()) {
+    on<BookListRequested>(_onBookListRequested);
+    on<ImportBookRequested>(_onImportBookRequested, transformer: droppable());
   }
 
-  Future<void> _onImportPdf(
-    ImportBookRequest event,
+  Future<void> _onImportBookRequested(
+    ImportBookRequested event,
     Emitter<ReaderState> emit,
   ) async {
-    emit(const ReaderLoading());
+    emit(state.copyWith(status: ReaderStatus.loading));
     try {
       await importBookUseCase(event.file);
 
       final books = await getBookListUseCase();
-      emit(ImportBookLoaded(book: books));
+      emit(state.copyWith(books: books, status: ReaderStatus.success));
     } catch (e) {
-      emit(ReaderFailure(message: e.toString()));
+      emit(state.copyWith(status: ReaderStatus.failure, errorMessage: e.toString()));
     }
   }
 
-  Future<void> _onGetBookList(
-    GetBookListRequest event,
+  Future<void> _onBookListRequested(
+    BookListRequested event,
     Emitter<ReaderState> emit,
   ) async {
-    emit(const ReaderLoading());
+    emit(state.copyWith(status: ReaderStatus.loading));
     try {
       final books = await getBookListUseCase();
-      emit(BookListLoaded(books: books));
+      emit(state.copyWith(status: ReaderStatus.success, books: books));
     } catch (e) {
-      emit(ReaderFailure(message: e.toString()));
+      emit(state.copyWith(status: ReaderStatus.failure, errorMessage: e.toString()));
     }
   }
 }

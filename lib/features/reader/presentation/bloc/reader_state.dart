@@ -1,31 +1,38 @@
 part of 'reader_bloc.dart';
 
-sealed class ReaderState {
-  const ReaderState();
+enum ReaderStatus {
+  initial,
+  loading,
+  importing,
+  success,
+  failure,
 }
 
-class ReaderInitial extends ReaderState {
-  const ReaderInitial();
-}
-
-class ReaderLoading extends ReaderState {
-  const ReaderLoading();
-}
-
-class ImportBookLoaded extends ReaderState {
-  final List<Book> book;
-
-  const ImportBookLoaded({required this.book});
-}
-
-class BookListLoaded extends ReaderState {
+final class ReaderState extends Equatable {
+  final ReaderStatus status;
   final List<Book> books;
+  final String? errorMessage;
 
-  const BookListLoaded({required this.books});
-}
+  const ReaderState({
+    this.status = ReaderStatus.initial,
+    this.books = const [],
+    this.errorMessage,
+  });
 
-class ReaderFailure extends ReaderState {
-  final String message;
+  bool get isLoading => status == ReaderStatus.loading || status == ReaderStatus.importing;
 
-  const ReaderFailure({required this.message});
+  ReaderState copyWith({
+    ReaderStatus? status,
+    List<Book>? books,
+    String? errorMessage,
+  }) {
+    return ReaderState(
+      status: status ?? this.status,
+      books: books ?? this.books,
+      errorMessage: errorMessage,
+    );
+  }
+
+  @override
+  List<Object?> get props => [status, books, errorMessage];
 }

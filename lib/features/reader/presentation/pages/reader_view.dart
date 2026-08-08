@@ -18,102 +18,137 @@ class _ReaderViewState extends State<ReaderView> {
   @override
   void initState() {
     super.initState();
-    context.read<ReaderBloc>().add(GetBookListRequest());
-  }
-
-  Widget _importButton({required String text}) {
-    return GestureDetector(
-      onTap: _pickAndImportBook,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-    );
+    context.read<ReaderBloc>().add(const BookListRequested());
   }
 
   Future<void> _pickAndImportBook() async {
-    final result = await FilePicker.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'epub', 'txt'],
-    );
+    try {
+      final result = await FilePicker.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'epub', 'txt'],
+      );
 
-    if (result != null && result.files.isNotEmpty) {
-      final file = File(result.files.single.path!);
+      final path = result?.files.single.path;
+
+      if (path == null) return;
       if (!mounted) return;
-      context.read<ReaderBloc>().add(ImportBookRequest(file: file));
+      context.read<ReaderBloc>().add(ImportBookRequested(file: File(path)));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("llllllllllll")));
     }
-  }
-
-  Widget _bookList() {
-    return BlocConsumer<ReaderBloc, ReaderState>(
-      listener: (context, state) {
-        if (state is ImportBookLoaded) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('book imported!'),
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is ReaderLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is BookListLoaded) {
-          final List<Book> books = state.books;
-          if (books.isEmpty) {
-            return Center(
-              child: Text(context.l10n.noBooksAvailable),
-            );
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: books.length,
-            itemBuilder: (context, index) {
-              final book = books[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 4),
-                child: ListTile(
-                  leading: const Icon(Icons.menu_book),
-                  title: Text(book.name),
-                  subtitle: Text('ID: ${book.id}'),
-                ),
-              );
-            },
-          );
-        } else if (state is ReaderFailure) {
-          return Center(
-            child: Text(
-              state.message,
-              style: const TextStyle(color: Colors.red),
-            ),
-          );
-        } else {
-          // ReaderInitial or other states
-          return const Center(child: Text('No books loaded'));
-        }
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _importButton(text: context.l10n.import),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: _ImportButton(
+              label: context.l10n.import,
+              onPressed: _pickAndImportBook,
+            ),
+          ),
           Expanded(
-            child: _bookList(),
+            child: BlocConsumer<ReaderBloc, ReaderState>(
+              listenWhen: (previous, current) =>
+                  previous.status != current.status &&
+                  (current.status == ReaderStatus.success || current.status == ReaderStatus.failure),
+              listener: (context, state) {
+                final messenger = ScaffoldMessenger.of(context);
+                if (state.status == ReaderStatus.success) {
+                  messenger.showSnackBar(
+                    SnackBar(
+                      // content: Text(context.l10n.bookImportedSuccessfully),
+                      content: Text("lllllll"),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                } else if (state.status == ReaderStatus.failure && state.books.isNotEmpty) {
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content:
+                          // Text(state.errorMessage ?? context.l10n.importFailed),
+                          Text(state.errorMessage ?? "llllllllll"),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state.status == ReaderStatus.loading && state.books.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state.status == ReaderStatus.failure && state.books.isEmpty) {
+                  return Center(
+                    child: Text(
+                      // state.errorMessage ?? context.l10n.importFailed,
+                      state.errorMessage ?? "llllllll",
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    ),
+                  );
+                }
+
+                if (state.books.isEmpty) {
+                  return Center(child: Text(context.l10n.noBooksAvailable));
+                }
+
+                return Column(
+                  children: [
+                    if (state.isLoading) const LinearProgressIndicator(),
+                    Expanded(child: _BookList(books: state.books)),
+                  ],
+                );
+              },
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ImportButton extends StatelessWidget {
+  const _ImportButton({required this.label, required this.onPressed});
+
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton.icon(
+      onPressed: onPressed,
+      icon: const Icon(Icons.file_upload_outlined),
+      label: Text(label),
+    );
+  }
+}
+
+class _BookList extends StatelessWidget {
+  const _BookList({required this.books});
+
+  final List<Book> books;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(8),
+      itemCount: books.length,
+      itemBuilder: (context, index) {
+        final book = books[index];
+        return Card(
+          key: ValueKey(book.id),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          child: ListTile(
+            leading: const Icon(Icons.menu_book),
+            title: Text(book.name),
+            subtitle: Text('ID: ${book.id}'),
+          ),
+        );
+      },
     );
   }
 }

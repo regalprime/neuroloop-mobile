@@ -1,16 +1,21 @@
 part of 'reader_bloc.dart';
-sealed class ReaderEvent {
 
+sealed class ReaderEvent extends Equatable {
   const ReaderEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
-class ImportBookRequest extends ReaderEvent {
+final class BookListRequested extends ReaderEvent {
+  const BookListRequested();
+}
+
+final class ImportBookRequested extends ReaderEvent {
   final File file;
 
-  const ImportBookRequest({required this.file});
-}
+  const ImportBookRequested({required this.file});
 
-class GetBookListRequest extends ReaderEvent {
-
-  const GetBookListRequest();
+  @override
+  List<Object?> get props => [file];
 }
