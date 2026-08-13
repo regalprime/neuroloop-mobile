@@ -1,0 +1,1 @@
+// Failure/Result types dùng chung
