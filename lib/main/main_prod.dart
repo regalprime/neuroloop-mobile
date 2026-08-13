@@ -1,17 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:neuroloop/main/app/bootstrap.dart';
 
-import '../core/di/injection.dart';
-import 'app/app.dart';
 import 'app/flavor.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-
-  const flavor = Flavor.prod;
-
-  await configureDependencies();
-
-  runApp(NeuroLoopApp(
-    flavor: flavor,
-  ));
+Future<void> main() {
+  return bootstrap(
+    flavor: Flavor.prod,
+  );
 }
