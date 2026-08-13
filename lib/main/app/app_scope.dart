@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neuroloop/core/di/injection.dart';
-import 'package:neuroloop/core/theme/theme_bloc.dart';
+import 'package:neuroloop/core/localization/bloc/language_bloc.dart';
+import 'package:neuroloop/core/theme/bloc/theme_bloc.dart';
 
 class AppScope extends StatelessWidget {
   final Widget child;
@@ -14,6 +15,9 @@ class AppScope extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => getIt<ThemeBloc>(),
+        ),
+        BlocProvider<LanguageBloc>(
+          create: (_) => getIt<LanguageBloc>()..add(LanguageInitialized()),
         ),
       ],
       child: child,

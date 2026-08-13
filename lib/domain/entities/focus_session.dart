@@ -7,4 +7,3 @@ class FocusSession {
     required this.duration,
   });
 }
-
