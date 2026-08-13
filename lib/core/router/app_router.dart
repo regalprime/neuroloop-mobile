@@ -1,10 +1,11 @@
 import 'package:go_router/go_router.dart';
+import 'package:neuroloop/features/dashboard/presentation/dashboard_view.dart';
 import 'package:neuroloop/features/reader/presentation/pages/reader_view.dart';
 import 'package:neuroloop/features/reader/presentation/providers/reader_scope.dart';
+import 'package:neuroloop/features/settings/presentation/language_picker_screen.dart';
 import 'package:neuroloop/features/settings/presentation/setting_screen.dart';
 import 'package:neuroloop/features/settings/presentation/theme_picker_screen.dart';
 import 'package:neuroloop/main/app/app_shell.dart';
-import 'package:neuroloop/presentations/home_screen.dart';
 
 import 'app_routes.dart';
 
@@ -39,7 +40,7 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.dashboard,
           builder: (context, state) {
-            return const DashboardTab();
+            return const DashboardView();
           },
         ),
       ],
@@ -71,6 +72,10 @@ class AppRouter {
             GoRoute(
               path: 'theme',
               builder: (_, __) => const ThemePickerScreen(),
+            ),
+            GoRoute(
+              path: 'language',
+              builder: (_, __) => const LanguagePickerScreen(),
             ),
           ],
         ),

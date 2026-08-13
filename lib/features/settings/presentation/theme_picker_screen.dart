@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neuroloop/core/theme/theme_bloc.dart';
+import 'package:neuroloop/core/theme/bloc/theme_bloc.dart';
 import 'package:neuroloop/core/theme/theme_registry.dart';
 
 class ThemePickerScreen extends StatelessWidget {

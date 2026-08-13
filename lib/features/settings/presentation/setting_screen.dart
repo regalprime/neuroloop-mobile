@@ -20,6 +20,13 @@ class SettingScreen extends StatelessWidget {
               },
               child: Text('Settings content goes here'),
             ),
+            const SizedBox(height: 50),
+            GestureDetector(
+              onTap: () {
+                context.push(AppRoutes.language);
+              },
+              child: Text('Settings content goes here'),
+            ),
           ],
         ),
       ),

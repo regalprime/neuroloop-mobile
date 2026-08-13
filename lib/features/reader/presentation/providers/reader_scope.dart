@@ -11,6 +11,13 @@ class ReaderScope extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [BlocProvider(create: (_) => getIt<ReaderBloc>())], child: child);
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<ReaderBloc>(),
+        )
+      ],
+      child: child,
+    );
   }
 }

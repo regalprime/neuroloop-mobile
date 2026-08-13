@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
+import 'package:neuroloop/core/localization/bloc/language_bloc.dart';
+import 'package:neuroloop/core/localization/language_repository.dart';
 import 'package:neuroloop/core/storage/app_storage.dart';
-import 'package:neuroloop/core/theme/theme_bloc.dart';
+import 'package:neuroloop/core/theme/bloc/theme_bloc.dart';
 import 'package:neuroloop/core/theme/theme_repository.dart';
 import 'package:neuroloop/features/reader/data/repositories/reader_repository_impl.dart';
 import 'package:neuroloop/features/reader/data/utils/document_type_resolver.dart';
@@ -16,6 +18,7 @@ Future<void> configureDependencies() async {
   await configureCoreModule();
 
   configureThemeModule();
+  configureLanguageModule();
   configureReaderModule();
 
   assert(getIt.isRegistered<ThemeBloc>());
@@ -31,6 +34,20 @@ Future<void> configureCoreModule() async {
 
   getIt.registerLazySingleton<AppStorage>(
     () => const AppStorage(),
+  );
+}
+
+void configureLanguageModule() {
+  getIt.registerLazySingleton<LanguageRepository>(
+    () => SharedPreferencesLanguageRepository(
+      getIt<SharedPreferences>(),
+    ),
+  );
+
+  getIt.registerFactory<LanguageBloc>(
+    () => LanguageBloc(
+      repository: getIt<LanguageRepository>(),
+    ),
   );
 }
 

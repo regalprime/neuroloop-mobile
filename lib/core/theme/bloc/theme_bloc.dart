@@ -1,16 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'theme_registry.dart';
-import 'theme_repository.dart';
-import 'themes/app_theme.dart';
+import '../theme_registry.dart';
+import '../theme_repository.dart';
+import '../themes/app_theme.dart';
 
 part 'theme_event.dart';
 part 'theme_state.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  ThemeBloc({required this.repository})
-      : super(ThemeState(theme: ThemeRegistry.defaultTheme)) {
+  ThemeBloc({required this.repository}) : super(ThemeState(theme: ThemeRegistry.defaultTheme)) {
     on<ThemeStarted>(_onThemeStarted);
     on<ThemeChanged>(_onThemeChanged);
   }
