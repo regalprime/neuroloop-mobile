@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neuroloop/core/localization/bloc/language_bloc.dart';
 import 'package:neuroloop/core/router/app_router.dart';
 import 'package:neuroloop/core/theme/bloc/theme_bloc.dart';
@@ -18,10 +19,17 @@ class NeuroLoopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScope(
-      child: _AppView(
-        flavor: flavor,
-      ),
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return AppScope(
+          child: _AppView(
+            flavor: flavor,
+          ),
+        );
+      },
     );
   }
 }
