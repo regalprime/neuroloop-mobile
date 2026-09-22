@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:neuroloop/domain/extension/app_extension.dart';
 import 'package:neuroloop/features/reader/domain/entities/book.dart';
 import 'package:neuroloop/features/reader/presentation/bloc/reader_bloc.dart';
@@ -139,13 +140,21 @@ class _BookList extends StatelessWidget {
       itemCount: books.length,
       itemBuilder: (context, index) {
         final book = books[index];
-        return Card(
-          key: ValueKey(book.id),
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          child: ListTile(
-            leading: const Icon(Icons.menu_book),
-            title: Text(book.name),
-            subtitle: Text('ID: ${book.id}'),
+        return GestureDetector(
+          onTap: () {
+            context.push(
+              '/pdf-viewer',
+              extra: book.path,
+            );
+          },
+          child: Card(
+            key: ValueKey(book.id),
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            child: ListTile(
+              leading: const Icon(Icons.menu_book),
+              title: Text(book.name),
+              subtitle: Text('ID: ${book.id}'),
+            ),
           ),
         );
       },

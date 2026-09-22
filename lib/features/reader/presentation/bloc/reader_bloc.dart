@@ -32,9 +32,20 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> {
       await importBookUseCase(event.file);
 
       final books = await getBookListUseCase();
-      emit(state.copyWith(books: books, status: ReaderStatus.success));
+
+      emit(
+        state.copyWith(
+          books: books,
+          status: ReaderStatus.success,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(status: ReaderStatus.failure, errorMessage: e.toString()));
+      emit(
+        state.copyWith(
+          status: ReaderStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 

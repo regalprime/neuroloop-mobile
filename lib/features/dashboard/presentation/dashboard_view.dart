@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -46,6 +47,7 @@ class _DashboardViewState extends State<DashboardView> {
           _buildMinutesButton(10),
           _buildMinutesButton(15),
           _buildMinutesButton(30),
+
         ],
       ),
     );
