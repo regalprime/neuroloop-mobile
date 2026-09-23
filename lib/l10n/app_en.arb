@@ -7,5 +7,7 @@
   "recentSessions": "Recent Sessions",
   "hello": "Hello",
   "import": "Import",
-  "noBooksAvailable": "No books available."
+  "noBooksAvailable": "No books available.",
+  "selectTime": "Select time",
+  "minute": "minute"
 }
