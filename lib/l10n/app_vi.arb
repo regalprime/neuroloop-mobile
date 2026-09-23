@@ -7,5 +7,7 @@
   "recentSessions": "Phiên gần đây",
   "hello": "Xin chào",
   "import": "Nhập",
-  "noBooksAvailable": "Không có sách nào."
+  "noBooksAvailable": "Không có sách nào.",
+  "selectTime": "Chọn giờ",
+  "minute": "phút"
 }
