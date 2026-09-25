@@ -6,6 +6,6 @@ class CancelAlarmUseCase {
   const CancelAlarmUseCase({required AlarmRepository repository}) : _repository = repository;
 
   Future<void> call({required int alarmId}) {
-    return _repository.cancel(id: alarmId);
+    return _repository.cancel(alarmId: alarmId);
   }
 }

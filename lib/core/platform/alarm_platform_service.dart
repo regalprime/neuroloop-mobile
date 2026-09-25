@@ -1,19 +1,21 @@
 import 'package:flutter/services.dart';
 
 class AlarmPlatformService {
-  static const MethodChannel _channel =
-  MethodChannel('com.neuroloop.neuroloop/alarm');
+  final MethodChannel _channel;
 
-  static Future<String> scheduleAlarm({
-    required int id,
+  AlarmPlatformService({MethodChannel? channel})
+      : _channel = channel ?? const MethodChannel('com.neuroloop.neuroloop/alarm');
+
+  Future<String> scheduleAlarm({
+    required int alarmId,
     required DateTime scheduledAt,
-    String title = 'NeuroLoop',
-    String body = 'Time to focus',
+    required String title,
+    required String body,
   }) async {
     final result = await _channel.invokeMethod<String>(
       'scheduleAlarm',
       {
-        'alarmId': id,
+        'alarmId': alarmId,
         'timestamp': scheduledAt.millisecondsSinceEpoch,
         'title': title,
         'body': body,
@@ -23,22 +25,22 @@ class AlarmPlatformService {
     return result ?? 'unknown';
   }
 
-  static Future<void> cancelAlarm(int id,) async {
+  Future<void> cancelAlarm({required int alarmId}) async {
     await _channel.invokeMethod(
       'cancelAlarm',
       {
-        'alarmId': id,
+        'alarmId': alarmId,
       },
     );
   }
 
-  static Future<void> openExactAlarmSettings() async {
+  Future<void> openExactAlarmSettings() async {
     await _channel.invokeMethod(
       'openExactAlarmSettings',
     );
   }
 
-  static Future<void> requestNotificationPermission() async {
+  Future<void> requestNotificationPermission() async {
     await _channel.invokeMethod(
       'requestNotificationPermission',
     );
