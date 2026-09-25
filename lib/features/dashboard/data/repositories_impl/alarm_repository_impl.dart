@@ -1,7 +1,13 @@
+import 'package:neuroloop/core/platform/alarm_platform_service.dart';
 import 'package:neuroloop/features/dashboard/domain/entities/alarm.dart';
 import 'package:neuroloop/features/dashboard/domain/repositories/alarm_repository.dart';
 
 class AlarmRepositoryImpl implements AlarmRepository {
+  final AlarmPlatformService _alarmPlatformService;
+
+  const AlarmRepositoryImpl({required AlarmPlatformService alarmPlatformService})
+      : _alarmPlatformService = alarmPlatformService;
+
   @override
   Future<void> schedule({required Alarm alarm}) {
     // TODO: implement schedule
@@ -9,20 +15,30 @@ class AlarmRepositoryImpl implements AlarmRepository {
   }
 
   @override
-  Future<void> cancel({required int id}) {
-    // TODO: implement cancel
-    throw UnimplementedError();
+  Future<void> cancel({required int alarmId}) {
+    return _alarmPlatformService.cancelAlarm(alarmId: alarmId);
   }
 
   @override
   Future<void> openExactAlarmSettings() {
-    // TODO: implement openExactAlarmSettings
-    throw UnimplementedError();
+    return _alarmPlatformService.openExactAlarmSettings();
   }
 
   @override
   Future<void> requestNotificationPermission() {
-    // TODO: implement requestNotificationPermission
-    throw UnimplementedError();
+    return _alarmPlatformService.requestNotificationPermission();
   }
+}
+
+class AlarmScheduleException implements Exception {
+  final String message;
+
+  const AlarmScheduleException(this.message);
+
+  @override
+  String toString() => message.toString();
+}
+
+class ExactAlarmPermissionException implements Exception {
+  const ExactAlarmPermissionException();
 }
