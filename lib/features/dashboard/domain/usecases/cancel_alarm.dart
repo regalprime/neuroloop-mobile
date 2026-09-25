@@ -1,11 +1,11 @@
 import 'package:neuroloop/features/dashboard/domain/repositories/alarm_repository.dart';
 
-class CancelAlarmUsecase {
-  final AlarmRepository repository;
+class CancelAlarmUseCase {
+  final AlarmRepository _repository;
 
-  const CancelAlarmUsecase({required this.repository});
+  const CancelAlarmUseCase({required AlarmRepository repository}) : _repository = repository;
 
   Future<void> call({required int alarmId}) {
-    return repository.cancel(id: alarmId);
+    return _repository.cancel(id: alarmId);
   }
 }

@@ -8,15 +8,30 @@ import android.os.Build
 
 object AlarmManagerHelper {
 
+    /**
+     * Schedule an exact alarm.
+     *
+     * @return true if the alarm was scheduled successfully.
+     * @return false if exact alarm permission is required.
+     */
     fun schedule(
         context: Context,
         id: Int,
         timestamp: Long,
         title: String,
         body: String,
-    ) {
+    ): Boolean {
         val alarmManager =
-            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            context.getSystemService(
+                Context.ALARM_SERVICE
+            ) as AlarmManager
+
+        // Android 12+ requires exact alarm permission.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms()) {
+                return false
+            }
+        }
 
         val intent = Intent(
             context,
@@ -35,19 +50,21 @@ object AlarmManagerHelper {
                     PendingIntent.FLAG_IMMUTABLE
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                throw SecurityException(
-                    "Exact alarm permission is not granted"
-                )
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                timestamp,
+                pendingIntent
+            )
+        } else {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                timestamp,
+                pendingIntent
+            )
         }
 
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            timestamp,
-            pendingIntent
-        )
+        return true
     }
 
     fun cancel(
@@ -55,7 +72,9 @@ object AlarmManagerHelper {
         id: Int,
     ) {
         val alarmManager =
-            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            context.getSystemService(
+                Context.ALARM_SERVICE
+            ) as AlarmManager
 
         val intent = Intent(
             context,

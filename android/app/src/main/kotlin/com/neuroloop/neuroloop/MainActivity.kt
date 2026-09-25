@@ -1,19 +1,24 @@
 package com.neuroloop.neuroloop
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
+import androidx.core.app.ActivityCompat
 import com.neuroloop.neuroloop.alarm.AlarmManagerHelper
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-
 class MainActivity : FlutterActivity() {
 
-    private val channelName = "com.neuroloop.neuroloop/alarm"
+    private val channelName =
+        "com.neuroloop.neuroloop/alarm"
 
-    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+    override fun configureFlutterEngine(
+        flutterEngine: FlutterEngine
+    ) {
         super.configureFlutterEngine(flutterEngine)
 
         MethodChannel(
@@ -24,10 +29,17 @@ class MainActivity : FlutterActivity() {
             when (call.method) {
 
                 "scheduleAlarm" -> {
-                    val id = call.argument<Int>("alarmId")
-                    val timestamp = call.argument<Long>("timestamp")
-                    val title = call.argument<String>("title")
-                    val body = call.argument<String>("body")
+                    val id =
+                        call.argument<Int>("alarmId")
+
+                    val timestamp =
+                        call.argument<Long>("timestamp")
+
+                    val title =
+                        call.argument<String>("title")
+
+                    val body =
+                        call.argument<String>("body")
 
                     if (
                         id == null ||
@@ -43,19 +55,27 @@ class MainActivity : FlutterActivity() {
                         return@setMethodCallHandler
                     }
 
-                    AlarmManagerHelper.schedule(
-                        context = this,
-                        id = id,
-                        timestamp = timestamp,
-                        title = title,
-                        body = body
-                    )
+                    val scheduled =
+                        AlarmManagerHelper.schedule(
+                            context = this,
+                            id = id,
+                            timestamp = timestamp,
+                            title = title,
+                            body = body
+                        )
 
-                    result.success(null)
+                    if (scheduled) {
+                        result.success("scheduled")
+                    } else {
+                        result.success(
+                            "permission_required"
+                        )
+                    }
                 }
 
                 "cancelAlarm" -> {
-                    val id = call.argument<Int>("alarmId")
+                    val id =
+                        call.argument<Int>("alarmId")
 
                     if (id == null) {
                         result.error(
@@ -75,12 +95,38 @@ class MainActivity : FlutterActivity() {
                 }
 
                 "openExactAlarmSettings" -> {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (
+                        Build.VERSION.SDK_INT >=
+                        Build.VERSION_CODES.S
+                    ) {
                         val intent = Intent(
                             Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
                         )
 
                         startActivity(intent)
+                    }
+
+                    result.success(null)
+                }
+
+                "requestNotificationPermission" -> {
+                    if (
+                        Build.VERSION.SDK_INT >=
+                        Build.VERSION_CODES.TIRAMISU
+                    ) {
+                        if (
+                            ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            requestPermissions(
+                                arrayOf(
+                                    Manifest.permission.POST_NOTIFICATIONS
+                                ),
+                                1001
+                            )
+                        }
                     }
 
                     result.success(null)

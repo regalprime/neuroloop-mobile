@@ -1,0 +1,4 @@
+enum AlarmScheduleType {
+  specificTime,
+  afterDuration,
+}

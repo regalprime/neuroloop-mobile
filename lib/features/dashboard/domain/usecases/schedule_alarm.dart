@@ -2,11 +2,11 @@ import 'package:neuroloop/features/dashboard/domain/entities/alarm.dart';
 import 'package:neuroloop/features/dashboard/domain/repositories/alarm_repository.dart';
 
 class ScheduleAlarmUseCase {
-  final AlarmRepository repository;
+  final AlarmRepository _repository;
 
-  const ScheduleAlarmUseCase({required this.repository});
+  const ScheduleAlarmUseCase({required AlarmRepository repository}) : _repository = repository;
 
   Future<void> call(Alarm alarm) {
-    return repository.schedule(alarm: alarm);
+    return _repository.schedule(alarm: alarm);
   }
 }

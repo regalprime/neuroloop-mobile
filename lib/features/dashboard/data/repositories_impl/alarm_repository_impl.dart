@@ -13,4 +13,16 @@ class AlarmRepositoryImpl implements AlarmRepository {
     // TODO: implement cancel
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> openExactAlarmSettings() {
+    // TODO: implement openExactAlarmSettings
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> requestNotificationPermission() {
+    // TODO: implement requestNotificationPermission
+    throw UnimplementedError();
+  }
 }

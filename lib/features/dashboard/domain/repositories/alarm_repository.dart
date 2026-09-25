@@ -4,4 +4,8 @@ abstract interface class AlarmRepository {
   Future<void> schedule({required Alarm alarm});
 
   Future<void> cancel({required int id});
+
+  Future<void> openExactAlarmSettings();
+
+  Future<void> requestNotificationPermission();
 }
