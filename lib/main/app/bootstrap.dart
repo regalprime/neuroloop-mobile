@@ -5,10 +5,12 @@ import 'package:neuroloop/main/app/flavor.dart';
 
 Future<void> bootstrap({required Flavor flavor}) async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await configureDependencies();
 
-  runApp(NeuroLoopApp(
-    flavor: flavor,
-  ));
+  runApp(
+    NeuroLoopApp(
+      flavor: flavor,
+    ),
+  );
 }

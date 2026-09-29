@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:neuroloop/features/dashboard/presentation/dashboard_scope.dart';
 import 'package:neuroloop/features/dashboard/presentation/dashboard_view.dart';
 import 'package:neuroloop/features/reader/presentation/pages/pdf_view.dart';
 import 'package:neuroloop/features/reader/presentation/pages/reader_view.dart';
@@ -48,7 +49,9 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.dashboard,
           builder: (context, state) {
-            return const DashboardView();
+            return const DashboardScope(
+              child: DashboardView(),
+            );
           },
         ),
       ],
