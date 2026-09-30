@@ -7,6 +7,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import com.neuroloop.neuroloop.alarm.AlarmManagerHelper
+import com.neuroloop.neuroloop.pdf.brige.PdfMethodChannel
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -15,6 +16,8 @@ class MainActivity : FlutterActivity() {
 
     private val channelName =
         "com.neuroloop.neuroloop/alarm"
+
+    private var pdfMethodChannel: PdfMethodChannel? = null
 
     override fun configureFlutterEngine(
         flutterEngine: FlutterEngine
@@ -136,6 +139,21 @@ class MainActivity : FlutterActivity() {
                     result.notImplemented()
                 }
             }
+
+            // ----- PDF channel -----
+            pdfMethodChannel = PdfMethodChannel(
+                context = applicationContext,
+                messenger = flutterEngine.dartExecutor.binaryMessenger,
+            )
         }
+    }
+
+    override fun cleanUpFlutterEngine(
+        flutterEngine: FlutterEngine
+    ) {
+        pdfMethodChannel?.dispose()
+        pdfMethodChannel = null
+
+        super.cleanUpFlutterEngine(flutterEngine)
     }
 }
