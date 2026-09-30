@@ -12,9 +12,13 @@ import 'package:neuroloop/features/dashboard/domain/usecases/open_exact_alarm_se
 import 'package:neuroloop/features/dashboard/domain/usecases/request_notification_permission.dart';
 import 'package:neuroloop/features/dashboard/domain/usecases/schedule_alarm.dart';
 import 'package:neuroloop/features/dashboard/presentation/bloc/alarm_bloc.dart';
+import 'package:neuroloop/features/reader/data/datasource/pdf_native_data_source.dart';
+import 'package:neuroloop/features/reader/data/repositories/pdf_repository_impl.dart';
 import 'package:neuroloop/features/reader/data/repositories/reader_repository_impl.dart';
 import 'package:neuroloop/features/reader/data/utils/document_type_resolver.dart';
+import 'package:neuroloop/features/reader/domain/repository/pdf_repository.dart';
 import 'package:neuroloop/features/reader/domain/repository/reader_repository.dart';
+import 'package:neuroloop/features/reader/domain/usecases/extract_text_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/get_book_list_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/import_book_usecase.dart';
 import 'package:neuroloop/features/reader/presentation/bloc/reader_bloc.dart';
@@ -123,6 +127,18 @@ void configureReaderModule() {
     () => GetBookListUseCase(
       readerRepository: getIt<ReaderRepository>(),
     ),
+  );
+
+  getIt.registerLazySingleton<PdfNativeDataSource>(
+    () => PdfNativeDataSource(),
+  );
+
+  getIt.registerLazySingleton<PdfRepository>(
+    () => PdfRepositoryImpl(dataSource: getIt<PdfNativeDataSource>()),
+  );
+
+  getIt.registerFactory<ExtractTextUsecase>(
+    () => ExtractTextUsecase(repository: getIt<PdfRepository>()),
   );
 
   getIt.registerFactory<ReaderBloc>(
