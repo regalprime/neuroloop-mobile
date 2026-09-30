@@ -1,8 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:neuroloop/features/dashboard/presentation/dashboard_scope.dart';
 import 'package:neuroloop/features/dashboard/presentation/dashboard_view.dart';
-import 'package:neuroloop/features/reader/presentation/pages/pdf_view.dart';
+import 'package:neuroloop/features/reader/presentation/pages/pdf_reader_view.dart';
 import 'package:neuroloop/features/reader/presentation/pages/reader_view.dart';
+import 'package:neuroloop/features/reader/presentation/providers/pdf_reader_scope.dart';
 import 'package:neuroloop/features/reader/presentation/providers/reader_scope.dart';
 import 'package:neuroloop/features/settings/presentation/language_picker_screen.dart';
 import 'package:neuroloop/features/settings/presentation/setting_screen.dart';
@@ -37,7 +38,11 @@ class AppRouter {
         path: AppRoutes.pdfViewer,
         builder: (context, state) {
           final filePath = state.extra as String;
-          return PdfView(filePath: filePath);
+
+          return PdfReaderScope(
+            path: filePath,
+            child: const PdfReaderView(),
+          );
         },
       ),
     ],

@@ -139,13 +139,15 @@ class MainActivity : FlutterActivity() {
                     result.notImplemented()
                 }
             }
-
-            // ----- PDF channel -----
-            pdfMethodChannel = PdfMethodChannel(
-                context = applicationContext,
-                messenger = flutterEngine.dartExecutor.binaryMessenger,
-            )
         }
+
+        // -------------------------
+        // PDF MethodChannel
+        // -------------------------
+        pdfMethodChannel = PdfMethodChannel(
+            context = applicationContext,
+            messenger = flutterEngine.dartExecutor.binaryMessenger,
+        )
     }
 
     override fun cleanUpFlutterEngine(

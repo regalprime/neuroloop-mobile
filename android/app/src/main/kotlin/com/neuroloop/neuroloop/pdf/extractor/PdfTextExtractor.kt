@@ -25,9 +25,9 @@ class PdfTextExtractor(
         }
 
         PDDocument.load(file).use { document ->
-            val striper = PDFTextStripper()
+            val stripper = PDFTextStripper()
 
-            return striper.getText(document)
+            return stripper.getText(document)
 
         }
     }

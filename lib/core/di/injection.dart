@@ -21,7 +21,8 @@ import 'package:neuroloop/features/reader/domain/repository/reader_repository.da
 import 'package:neuroloop/features/reader/domain/usecases/extract_text_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/get_book_list_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/import_book_usecase.dart';
-import 'package:neuroloop/features/reader/presentation/bloc/reader_bloc.dart';
+import 'package:neuroloop/features/reader/presentation/bloc/pdf_reader_bloc/pdf_bloc.dart';
+import 'package:neuroloop/features/reader/presentation/bloc/reader_bloc/reader_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -139,6 +140,10 @@ void configureReaderModule() {
 
   getIt.registerFactory<ExtractTextUsecase>(
     () => ExtractTextUsecase(repository: getIt<PdfRepository>()),
+  );
+
+  getIt.registerFactory<PdfReaderBloc>(
+    () => PdfReaderBloc(extractTextUseCase: getIt<ExtractTextUsecase>()),
   );
 
   getIt.registerFactory<ReaderBloc>(

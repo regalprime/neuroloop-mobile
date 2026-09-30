@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neuroloop/features/reader/presentation/bloc/reader_bloc.dart';
+import 'package:neuroloop/features/reader/presentation/bloc/reader_bloc/reader_bloc.dart';
 
 import '../../../../core/di/injection.dart';
 

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neuroloop/features/reader/domain/usecases/get_book_list_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/import_book_usecase.dart';
 
-import '../../domain/entities/book.dart';
+import '../../../domain/entities/book.dart';
 
 part 'reader_event.dart';
 part 'reader_state.dart';
