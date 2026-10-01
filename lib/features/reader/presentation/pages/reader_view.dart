@@ -8,6 +8,7 @@ import 'package:neuroloop/core/router/app_routes.dart';
 import 'package:neuroloop/domain/extension/app_extension.dart';
 import 'package:neuroloop/features/reader/domain/entities/book.dart';
 import 'package:neuroloop/features/reader/presentation/bloc/reader_bloc/reader_bloc.dart';
+import 'package:neuroloop/features/reader/presentation/pages/widgets/thumbnail.dart';
 
 class ReaderView extends StatefulWidget {
   const ReaderView({super.key});
@@ -179,7 +180,7 @@ class _BookList extends StatelessWidget {
           key: ValueKey(book.id),
           margin: const EdgeInsets.symmetric(vertical: 4),
           child: ListTile(
-            leading: const Icon(Icons.menu_book),
+            leading: Thumbnail(path: book.path),
             title: Text(book.name),
             subtitle: Text('ID: ${book.id}'),
             onTap: () => onBookTap(book),

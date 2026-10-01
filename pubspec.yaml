@@ -48,6 +48,7 @@ dependencies:
   path_provider: ^2.1.5
   bloc_concurrency: ^0.3.0
   flutter_screenutil: ^5.9.3
+  pdfx: ^2.10.0
 
 dev_dependencies:
   flutter_test:
