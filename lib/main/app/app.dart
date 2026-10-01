@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neuroloop/core/localization/bloc/language_bloc.dart';
 import 'package:neuroloop/core/router/app_router.dart';
 import 'package:neuroloop/core/theme/bloc/theme_bloc.dart';
+import 'package:neuroloop/l10n/app_localizations.dart';
 import 'package:neuroloop/main/app/app_scope.dart';
 
 import 'flavor.dart';

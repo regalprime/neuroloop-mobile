@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:neuroloop/core/router/app_routes.dart';
 import 'package:neuroloop/domain/extension/app_extension.dart';
@@ -58,103 +59,76 @@ class _ReaderViewState extends State<ReaderView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: _ImportButton(
-              label: context.l10n.import,
-              onPressed: _pickAndImportBook,
-            ),
-          ),
-          Expanded(
-            child: BlocConsumer<ReaderBloc, ReaderState>(
-              listenWhen: (previous, current) =>
-                  previous.status != current.status &&
-                  (current.status == ReaderStatus.success || current.status == ReaderStatus.failure),
-              listener: (context, state) {
-                final messenger = ScaffoldMessenger.of(context);
+    return Scaffold(
+      body: SafeArea(
+        child: BlocConsumer<ReaderBloc, ReaderState>(
+          listenWhen: (previous, current) =>
+              previous.status != current.status &&
+              (current.status == ReaderStatus.success || current.status == ReaderStatus.failure),
+          listener: (context, state) {
+            final messenger = ScaffoldMessenger.of(context);
 
-                if (state.status == ReaderStatus.success) {
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Book imported successfully.'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                } else if (state.status == ReaderStatus.failure && state.books.isNotEmpty) {
-                  messenger.showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        state.errorMessage ?? 'Failed to import book.',
-                      ),
-                    ),
-                  );
-                }
-              },
-              builder: (context, state) {
-                if (state.status == ReaderStatus.loading && state.books.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+            if (state.status == ReaderStatus.success) {
+              messenger.showSnackBar(
+                const SnackBar(
+                  content: Text('Book imported successfully.'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            } else if (state.status == ReaderStatus.failure && state.books.isNotEmpty) {
+              messenger.showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.errorMessage ?? 'Failed to import book.',
+                  ),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state.status == ReaderStatus.loading && state.books.isEmpty) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-                if (state.status == ReaderStatus.failure && state.books.isEmpty) {
-                  return Center(
-                    child: Text(
-                      state.errorMessage ?? 'Failed to load books.',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                  );
-                }
+            if (state.status == ReaderStatus.failure && state.books.isEmpty) {
+              return Center(
+                child: Text(
+                  state.errorMessage ?? 'Failed to load books.',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+              );
+            }
 
-                if (state.books.isEmpty) {
-                  return Center(
-                    child: Text(
-                      context.l10n.noBooksAvailable,
-                    ),
-                  );
-                }
+            if (state.books.isEmpty) {
+              return Center(
+                child: Text(
+                  context.l10n.noBooksAvailable,
+                ),
+              );
+            }
 
-                return Column(
-                  children: [
-                    if (state.isLoading) const LinearProgressIndicator(),
-                    Expanded(
-                      child: _BookList(
-                        books: state.books,
-                        onBookTap: _openBook,
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
+            return Column(
+              children: [
+                if (state.isLoading) const LinearProgressIndicator(),
+                Expanded(
+                  child: _BookList(
+                    books: state.books,
+                    onBookTap: _openBook,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
-    );
-  }
-}
-
-class _ImportButton extends StatelessWidget {
-  const _ImportButton({
-    required this.label,
-    required this.onPressed,
-  });
-
-  final String label;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton.icon(
-      onPressed: onPressed,
-      icon: const Icon(Icons.file_upload_outlined),
-      label: Text(label),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _pickAndImportBook,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
@@ -170,23 +144,105 @@ class _BookList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.all(8),
+    return GridView.builder(
+      padding: const EdgeInsets.all(12),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 1,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        mainAxisExtent: 200,
+      ),
       itemCount: books.length,
       itemBuilder: (context, index) {
         final book = books[index];
 
-        return Card(
-          key: ValueKey(book.id),
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          child: ListTile(
-            leading: Thumbnail(path: book.path),
-            title: Text(book.name),
-            subtitle: Text('ID: ${book.id}'),
-            onTap: () => onBookTap(book),
-          ),
+        return _BookCard(
+          book: book,
+          onTap: () => onBookTap(book),
         );
       },
+    );
+  }
+}
+
+class _BookCard extends StatelessWidget {
+  const _BookCard({
+    required this.book,
+    required this.onTap,
+  });
+
+  final Book book;
+  final VoidCallback onTap;
+
+  String _getTitle({required String name}) {
+    final withoutExtension = name.replaceFirst(
+      RegExp(r'\.[^.]+$'),
+      '',
+    );
+
+    return withoutExtension.replaceAll(RegExp(r'[_\-,]+'), ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.all(12.r),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 100.w,
+                child: Thumbnail(
+                  path: book.path,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _getTitle(name: book.name),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+
+                    const Spacer(),
+
+                    // Actions
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            // TODO: Implement
+                          },
+                          tooltip: 'Read',
+                          icon: const Icon(Icons.menu_book_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            // TODO: Implement
+                          },
+                          tooltip: 'More',
+                          icon: const Icon(Icons.more_vert),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
