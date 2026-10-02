@@ -85,9 +85,9 @@ class _ThumbnailState extends State<Thumbnail> {
       borderRadius: BorderRadius.circular(4),
       child: Image.memory(
         imageBytes,
-        fit: BoxFit.contain,
         width: double.infinity,
         height: double.infinity,
+        fit: BoxFit.cover,
         filterQuality: FilterQuality.medium,
       ),
     );

@@ -1,6 +1,6 @@
-part of 'reader_bloc.dart';
+part of 'books_bloc.dart';
 
-enum ReaderStatus {
+enum BooksStatus {
   initial,
   loading,
   importing,
@@ -8,25 +8,25 @@ enum ReaderStatus {
   failure,
 }
 
-final class ReaderState extends Equatable {
-  final ReaderStatus status;
+final class BooksState extends Equatable {
+  final BooksStatus status;
   final List<Book> books;
   final String? errorMessage;
 
-  const ReaderState({
-    this.status = ReaderStatus.initial,
+  const BooksState({
+    this.status = BooksStatus.initial,
     this.books = const [],
     this.errorMessage,
   });
 
-  bool get isLoading => status == ReaderStatus.loading || status == ReaderStatus.importing;
+  bool get isLoading => status == BooksStatus.loading || status == BooksStatus.importing;
 
-  ReaderState copyWith({
-    ReaderStatus? status,
+  BooksState copyWith({
+    BooksStatus? status,
     List<Book>? books,
     String? errorMessage,
   }) {
-    return ReaderState(
+    return BooksState(
       status: status ?? this.status,
       books: books ?? this.books,
       errorMessage: errorMessage,

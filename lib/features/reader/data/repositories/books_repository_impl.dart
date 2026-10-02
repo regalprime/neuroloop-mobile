@@ -1,14 +1,13 @@
 import 'dart:io';
 
 import 'package:neuroloop/core/storage/app_storage.dart';
+import 'package:neuroloop/features/reader/domain/entities/book.dart';
+import 'package:neuroloop/features/reader/domain/repository/books_repository.dart';
 
-import '../../domain/entities/book.dart';
-import '../../domain/repository/reader_repository.dart';
-
-class ReaderRepositoryImpl implements ReaderRepository {
+class BooksRepositoryImpl implements BooksRepository {
   final AppStorage storage;
 
-  ReaderRepositoryImpl({
+  BooksRepositoryImpl({
     required this.storage,
   });
 
@@ -43,5 +42,11 @@ class ReaderRepositoryImpl implements ReaderRepository {
         );
       }),
     );
+  }
+
+  @override
+  Future<void> deleteBook(String path) {
+    // TODO: implement deleteBook
+    throw UnimplementedError();
   }
 }
