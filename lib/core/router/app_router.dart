@@ -1,10 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:neuroloop/features/dashboard/presentation/dashboard_scope.dart';
 import 'package:neuroloop/features/dashboard/presentation/dashboard_view.dart';
+import 'package:neuroloop/features/reader/presentation/pages/books_view.dart';
 import 'package:neuroloop/features/reader/presentation/pages/pdf_reader_view.dart';
-import 'package:neuroloop/features/reader/presentation/pages/reader_view.dart';
+import 'package:neuroloop/features/reader/presentation/providers/books_scope.dart';
 import 'package:neuroloop/features/reader/presentation/providers/pdf_reader_scope.dart';
-import 'package:neuroloop/features/reader/presentation/providers/reader_scope.dart';
 import 'package:neuroloop/features/settings/presentation/language_picker_screen.dart';
 import 'package:neuroloop/features/settings/presentation/setting_screen.dart';
 import 'package:neuroloop/features/settings/presentation/theme_picker_screen.dart';
@@ -67,10 +67,10 @@ class AppRouter {
     return StatefulShellBranch(
       routes: [
         GoRoute(
-          path: AppRoutes.reader,
+          path: AppRoutes.books,
           builder: (context, state) {
-            return const ReaderScope(
-              child: ReaderView(),
+            return const BooksScope(
+              child: BooksView(),
             );
           },
         ),

@@ -1,6 +1,6 @@
 abstract final class AppRoutes {
   static const dashboard = '/dashboard';
-  static const reader = '/reader';
+  static const books = '/books';
   static const pdfViewer = '/pdf-viewer';
   static const settings = '/settings';
 

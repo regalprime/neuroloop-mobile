@@ -8,22 +8,22 @@ import 'package:go_router/go_router.dart';
 import 'package:neuroloop/core/router/app_routes.dart';
 import 'package:neuroloop/domain/extension/app_extension.dart';
 import 'package:neuroloop/features/reader/domain/entities/book.dart';
-import 'package:neuroloop/features/reader/presentation/bloc/reader_bloc/reader_bloc.dart';
+import 'package:neuroloop/features/reader/presentation/bloc/books_bloc/books_bloc.dart';
 import 'package:neuroloop/features/reader/presentation/pages/widgets/thumbnail.dart';
 
-class ReaderView extends StatefulWidget {
-  const ReaderView({super.key});
+class BooksView extends StatefulWidget {
+  const BooksView({super.key});
 
   @override
-  State<ReaderView> createState() => _ReaderViewState();
+  State<BooksView> createState() => _BooksViewState();
 }
 
-class _ReaderViewState extends State<ReaderView> {
+class _BooksViewState extends State<BooksView> {
   @override
   void initState() {
     super.initState();
 
-    context.read<ReaderBloc>().add(const BookListRequested());
+    context.read<BooksBloc>().add(const BookListRequested());
   }
 
   Future<void> _pickAndImportBook() async {
@@ -38,7 +38,7 @@ class _ReaderViewState extends State<ReaderView> {
       if (path == null) return;
       if (!mounted) return;
 
-      context.read<ReaderBloc>().add(ImportBookRequested(file: File(path)));
+      context.read<BooksBloc>().add(ImportBookRequested(file: File(path)));
     } catch (e) {
       if (!mounted) return;
 
@@ -57,25 +57,29 @@ class _ReaderViewState extends State<ReaderView> {
     );
   }
 
+  // Future<void> _deleteBook(String path) {
+  //   fd
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocConsumer<ReaderBloc, ReaderState>(
+        child: BlocConsumer<BooksBloc, BooksState>(
           listenWhen: (previous, current) =>
               previous.status != current.status &&
-              (current.status == ReaderStatus.success || current.status == ReaderStatus.failure),
+              (current.status == BooksStatus.success || current.status == BooksStatus.failure),
           listener: (context, state) {
             final messenger = ScaffoldMessenger.of(context);
 
-            if (state.status == ReaderStatus.success) {
+            if (state.status == BooksStatus.success) {
               messenger.showSnackBar(
                 const SnackBar(
                   content: Text('Book imported successfully.'),
                   duration: Duration(seconds: 2),
                 ),
               );
-            } else if (state.status == ReaderStatus.failure && state.books.isNotEmpty) {
+            } else if (state.status == BooksStatus.failure && state.books.isNotEmpty) {
               messenger.showSnackBar(
                 SnackBar(
                   content: Text(
@@ -86,13 +90,13 @@ class _ReaderViewState extends State<ReaderView> {
             }
           },
           builder: (context, state) {
-            if (state.status == ReaderStatus.loading && state.books.isEmpty) {
+            if (state.status == BooksStatus.loading && state.books.isEmpty) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
 
-            if (state.status == ReaderStatus.failure && state.books.isEmpty) {
+            if (state.status == BooksStatus.failure && state.books.isEmpty) {
               return Center(
                 child: Text(
                   state.errorMessage ?? 'Failed to load books.',
@@ -233,6 +237,13 @@ class _BookCard extends StatelessWidget {
                           },
                           tooltip: 'More',
                           icon: const Icon(Icons.more_vert),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            // TODO: Implement
+                          },
+                          tooltip: 'Delete',
+                          icon: const Icon(Icons.delete),
                         ),
                       ],
                     ),
