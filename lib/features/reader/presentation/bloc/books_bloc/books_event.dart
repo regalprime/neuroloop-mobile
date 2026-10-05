@@ -20,10 +20,10 @@ final class ImportBookRequested extends BooksEvent {
   List<Object?> get props => [file];
 }
 
-final class DeleteBook extends BooksEvent {
+final class DeleteBookRequested extends BooksEvent {
   final String path;
 
-  const DeleteBook({required this.path});
+  const DeleteBookRequested({required this.path});
 
   @override
   List<Object?> get props => [path];

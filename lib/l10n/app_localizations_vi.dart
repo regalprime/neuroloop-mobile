@@ -39,5 +39,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String get selectTime => 'Chọn giờ';
 
   @override
+  String get deleteBook => 'Xóa sách';
+
+  @override
+  String get confirmDeleteBook => 'Bạn có chắc chắn muốn xóa sách này không?';
+
+  @override
+  String get cancel => 'Hủy';
+
+  @override
+  String get delete => 'Xóa';
+
+  @override
+  String get gotIt => 'Đã hiểu';
+
+  @override
   String get minute => 'phút';
 }

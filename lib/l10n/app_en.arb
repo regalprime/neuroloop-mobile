@@ -9,5 +9,10 @@
   "import": "Import",
   "noBooksAvailable": "No books available.",
   "selectTime": "Select time",
+  "deleteBook": "Delete book",
+  "confirmDeleteBook": "Are you sure you want to delete this book?",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "gotIt": "Got it",
   "minute": "minute"
 }

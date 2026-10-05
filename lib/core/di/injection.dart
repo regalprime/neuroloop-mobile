@@ -5,6 +5,8 @@ import 'package:neuroloop/core/platform/alarm_platform_service.dart';
 import 'package:neuroloop/core/storage/app_storage.dart';
 import 'package:neuroloop/core/theme/bloc/theme_bloc.dart';
 import 'package:neuroloop/core/theme/theme_repository.dart';
+import 'package:neuroloop/core/utils/id_generator.dart';
+import 'package:neuroloop/core/utils/uuid_generator.dart';
 import 'package:neuroloop/features/dashboard/data/repositories_impl/alarm_repository_impl.dart';
 import 'package:neuroloop/features/dashboard/domain/repositories/alarm_repository.dart';
 import 'package:neuroloop/features/dashboard/domain/usecases/cancel_alarm.dart';
@@ -12,8 +14,7 @@ import 'package:neuroloop/features/dashboard/domain/usecases/open_exact_alarm_se
 import 'package:neuroloop/features/dashboard/domain/usecases/request_notification_permission.dart';
 import 'package:neuroloop/features/dashboard/domain/usecases/schedule_alarm.dart';
 import 'package:neuroloop/features/dashboard/presentation/bloc/alarm_bloc.dart';
-import 'package:neuroloop/features/reader/data/datasource/pdf_native_data_source.dart';
-import 'package:neuroloop/features/reader/data/repositories/books_repository_impl.dart';
+import 'package:neuroloop/features/reader/data/datasources/pdf_native_data_source.dart';
 import 'package:neuroloop/features/reader/data/repositories/pdf_repository_impl.dart';
 import 'package:neuroloop/features/reader/data/utils/document_type_resolver.dart';
 import 'package:neuroloop/features/reader/domain/repository/books_repository.dart';
@@ -49,6 +50,10 @@ Future<void> configureCoreModule() async {
 
   getIt.registerLazySingleton<AppStorage>(
     () => const AppStorage(),
+  );
+
+  getIt.registerLazySingleton<IdGenerator>(
+    () => const UuidGenerator(),
   );
 }
 
@@ -113,11 +118,17 @@ void configureReaderModule() {
     () => const DocumentTypeResolver(),
   );
 
-  getIt.registerLazySingleton<BooksRepository>(
-    () => BooksRepositoryImpl(
-      storage: getIt<AppStorage>(),
-    ),
-  );
+  // getIt.registerLazySingleton<BooksLocalDataSource>(
+  //     () =>
+  // );
+  //
+  // getIt.registerLazySingleton<BooksRepository>(
+  //   () => BooksRepositoryImpl(
+  //     storage: getIt<AppStorage>(),
+  //     booksLocalDataSource: null,
+  //     idGenerator: null,
+  //   ),
+  // );
 
   getIt.registerFactory<ImportBookUseCase>(
     () => ImportBookUseCase(
@@ -155,6 +166,7 @@ void configureReaderModule() {
     () => BooksBloc(
       importBookUseCase: getIt<ImportBookUseCase>(),
       getBookListUseCase: getIt<GetBookListUseCase>(),
+      deleteBookUsecase: getIt<DeleteBookUsecase>(),
     ),
   );
 }

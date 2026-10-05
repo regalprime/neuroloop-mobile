@@ -9,5 +9,10 @@
   "import": "Nhập",
   "noBooksAvailable": "Không có sách nào.",
   "selectTime": "Chọn giờ",
+  "deleteBook": "Xóa sách",
+  "confirmDeleteBook": "Bạn có chắc chắn muốn xóa sách này không?",
+  "cancel": "Hủy",
+  "delete": "Xóa",
+  "gotIt": "Đã hiểu",
   "minute": "phút"
 }

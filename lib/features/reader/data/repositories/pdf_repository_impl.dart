@@ -1,4 +1,4 @@
-import 'package:neuroloop/features/reader/data/datasource/pdf_native_data_source.dart';
+import 'package:neuroloop/features/reader/data/datasources/pdf_native_data_source.dart';
 import 'package:neuroloop/features/reader/domain/repository/pdf_repository.dart';
 
 class PdfRepositoryImpl implements PdfRepository {

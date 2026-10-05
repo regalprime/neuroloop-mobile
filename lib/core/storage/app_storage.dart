@@ -20,34 +20,33 @@ class AppStorage {
     return booksDir;
   }
 
-  Future<File> saveBook(File source) async {
+  Future<File> saveFile({required File source, required String fileName}) async {
     final booksDir = await booksDirectory();
 
     final destination = File(
-      path.join(
-        booksDir.path,
-        path.basename(source.path),
-      ),
+      path.join(booksDir.path, fileName),
     );
 
     return source.copy(destination.path);
   }
 
-  Future<List<File>> getBooks() async {
-    final booksDir = await booksDirectory();
+  Future<File> getFile(String fileName) async {
+    final directory = await booksDirectory();
 
-    return booksDir.listSync().whereType<File>().toList();
+    return File(path.join(directory.path, fileName));
   }
 
-  Future<void> deleteBook(String fileName) async {
-    final booksDir = await booksDirectory();
-
-    final file = File(
-      path.join(booksDir.path, fileName),
-    );
+  Future<void> deleteFile(String fileName) async {
+    final file = await getFile(fileName);
 
     if (await file.exists()) {
       await file.delete();
     }
+  }
+
+  Future<bool> fileExists(String fileName) async {
+    final file = await getFile(fileName);
+
+    return file.exists();
   }
 }

@@ -39,5 +39,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectTime => 'Select time';
 
   @override
+  String get deleteBook => 'Delete book';
+
+  @override
+  String get confirmDeleteBook => 'Are you sure you want to delete this book?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get gotIt => 'Got it';
+
+  @override
   String get minute => 'minute';
 }

@@ -11,6 +11,8 @@ import 'package:neuroloop/features/reader/domain/entities/book.dart';
 import 'package:neuroloop/features/reader/presentation/bloc/books_bloc/books_bloc.dart';
 import 'package:neuroloop/features/reader/presentation/pages/widgets/thumbnail.dart';
 
+import '../../../../design_system/design_system.dart';
+
 class BooksView extends StatefulWidget {
   const BooksView({super.key});
 
@@ -53,13 +55,50 @@ class _BooksViewState extends State<BooksView> {
   void _openBook(Book book) {
     context.push(
       AppRoutes.pdfViewer,
-      extra: book.path,
+      // extra: book.path,
+      extra: '',
     );
   }
 
-  // Future<void> _deleteBook(String path) {
-  //   fd
-  // }
+  Future<void> _deleteBook({required String path}) async {
+    try {
+      if (path.isEmpty) {
+        AppDialog.show(
+          context: context,
+          title: context.l10n.deleteBook,
+          content: Text(context.l10n.confirmDeleteBook),
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(context.l10n.gotIt),
+            ),
+          ],
+        );
+      }
+
+      context.read<BooksBloc>().add(DeleteBookRequested(path: path));
+    } catch (e) {
+      AppDialog.show(
+        context: context,
+        title: context.l10n.deleteBook,
+        content: Text(context.l10n.confirmDeleteBook),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(context.l10n.delete),
+          ),
+        ],
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +240,8 @@ class _BookCard extends StatelessWidget {
               SizedBox(
                 width: 100.w,
                 child: Thumbnail(
-                  path: book.path,
+                  // path: book.path,
+                  path: '',
                 ),
               ),
               const SizedBox(width: 12),

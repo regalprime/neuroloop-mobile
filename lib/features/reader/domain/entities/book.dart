@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import 'book_content.dart';
 import 'book_metadata.dart';
 import 'book_resources.dart';
@@ -17,18 +19,21 @@ class Book1 {
   });
 }
 
-class Book {
+class Book extends Equatable {
   final String id;
   final String name;
-  final String path;
+  final String fileName;
   final int size;
   final DateTime importedAt;
 
   const Book({
     required this.id,
     required this.name,
-    required this.path,
+    required this.fileName,
     required this.size,
     required this.importedAt,
   });
+
+  @override
+  List<Object?> get props => [id, name, fileName, size, importedAt];
 }
