@@ -49,4 +49,10 @@ class AppStorage {
 
     return file.exists();
   }
+
+  Future<String> bookFilePath(String fileName) async {
+    final directory = await booksDirectory();
+
+    return path.join(directory.path, fileName);
+  }
 }

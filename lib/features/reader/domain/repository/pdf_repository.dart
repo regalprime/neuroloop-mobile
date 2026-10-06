@@ -1,3 +1,3 @@
 abstract interface class PdfRepository {
-  Future<String> extractText({required String path});
+  Future<String> extractText({required String bookId});
 }

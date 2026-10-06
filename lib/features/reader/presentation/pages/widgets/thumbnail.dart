@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:neuroloop/core/storage/app_storage.dart';
 import 'package:pdfx/pdfx.dart';
 
 class Thumbnail extends StatefulWidget {
@@ -28,13 +29,17 @@ class _ThumbnailState extends State<Thumbnail> {
 
   Future<void> _renderThumbnail() async {
     try {
-      final document = await PdfDocument.openFile(widget.path);
+      final filePath = await const AppStorage().bookFilePath(
+        widget.path,
+      );
+
+      final document = await PdfDocument.openFile(filePath);
 
       final page = await document.getPage(1);
 
       final pageImage = await page.render(
-        width: page.width,
-        height: page.height,
+        width: 300,
+        height: 300 * page.height / page.width,
         format: PdfPageImageFormat.png,
       );
 
@@ -47,7 +52,7 @@ class _ThumbnailState extends State<Thumbnail> {
         _imageBytes = pageImage?.bytes;
         _isLoading = false;
       });
-    } catch (_) {
+    } catch (error) {
       if (!mounted) return;
 
       setState(() {

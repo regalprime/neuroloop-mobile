@@ -5,7 +5,9 @@ abstract interface class BooksLocalDataSource {
 
   Future<List<Book>> getBooks();
 
-  Future<Book?> getBookId(String id);
+  Future<Book?> getBookById(String id);
 
   Future<void> deleteBook(String id);
+
+  Stream<List<Book>> watchBooks();
 }

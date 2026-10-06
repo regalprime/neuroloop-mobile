@@ -7,7 +7,13 @@ class PdfRepositoryImpl implements PdfRepository {
   const PdfRepositoryImpl({required this.dataSource});
 
   @override
-  Future<String> extractText({required String path}) {
+  Future<String> extractText({required String bookId}) async {
+    // final path = await booksLocalDataSource
+
+    // TODO
+    // sua path
+    final path = '';
+
     return dataSource.extractText(path: path);
   }
 }

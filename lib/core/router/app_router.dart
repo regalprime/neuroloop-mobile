@@ -37,10 +37,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.pdfViewer,
         builder: (context, state) {
-          final filePath = state.extra as String;
+          final bookId = state.extra as String;
 
           return PdfReaderScope(
-            path: filePath,
+            bookId: bookId,
             child: const PdfReaderView(),
           );
         },

@@ -49,7 +49,7 @@ class BooksRepositoryImpl implements BooksRepository {
 
   @override
   Future<void> deleteBook(String bookId) async {
-    final book = await booksLocalDataSource.getBookId(bookId);
+    final book = await booksLocalDataSource.getBookById(bookId);
     if (book == null) return;
 
     await storage.deleteFile(book.fileName);

@@ -1,11 +1,11 @@
 import 'package:neuroloop/features/reader/domain/repository/pdf_repository.dart';
 
-class ExtractTextUsecase {
+class ExtractTextUseCase {
   final PdfRepository repository;
 
-  const ExtractTextUsecase({required this.repository});
+  const ExtractTextUseCase({required this.repository});
 
-  Future<String> call({required String path}) async {
-    return repository.extractText(path: path);
+  Future<String> call({required String bookId}) async {
+    return repository.extractText(bookId: bookId);
   }
 }

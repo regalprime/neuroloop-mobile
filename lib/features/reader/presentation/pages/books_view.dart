@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:neuroloop/core/router/app_routes.dart';
+import 'package:neuroloop/design_system/loading/ds_loading.dart';
 import 'package:neuroloop/domain/extension/app_extension.dart';
 import 'package:neuroloop/features/reader/domain/entities/book.dart';
 import 'package:neuroloop/features/reader/presentation/bloc/books_bloc/books_bloc.dart';
@@ -55,8 +56,7 @@ class _BooksViewState extends State<BooksView> {
   void _openBook(Book book) {
     context.push(
       AppRoutes.pdfViewer,
-      // extra: book.path,
-      extra: '',
+      extra: book.id,
     );
   }
 
@@ -130,9 +130,7 @@ class _BooksViewState extends State<BooksView> {
           },
           builder: (context, state) {
             if (state.status == BooksStatus.loading && state.books.isEmpty) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const AppLoading();
             }
 
             if (state.status == BooksStatus.failure && state.books.isEmpty) {
@@ -156,7 +154,7 @@ class _BooksViewState extends State<BooksView> {
 
             return Column(
               children: [
-                if (state.isLoading) const LinearProgressIndicator(),
+                if (state.isLoading) const AppLoading(),
                 Expanded(
                   child: _BookList(
                     books: state.books,
@@ -240,8 +238,7 @@ class _BookCard extends StatelessWidget {
               SizedBox(
                 width: 100.w,
                 child: Thumbnail(
-                  // path: book.path,
-                  path: '',
+                  path: book.fileName,
                 ),
               ),
               const SizedBox(width: 12),

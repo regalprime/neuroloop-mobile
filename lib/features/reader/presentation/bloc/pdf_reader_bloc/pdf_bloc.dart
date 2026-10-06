@@ -6,7 +6,7 @@ part 'pdf_reader_event.dart';
 part 'pdf_reader_state.dart';
 
 class PdfReaderBloc extends Bloc<PdfReaderEvent, PdfReaderState> {
-  final ExtractTextUsecase extractTextUseCase;
+  final ExtractTextUseCase extractTextUseCase;
 
   PdfReaderBloc({required this.extractTextUseCase}) : super(const PdfReaderState()) {
     on<PdfSelected>(_onPdfSelected);
@@ -18,7 +18,7 @@ class PdfReaderBloc extends Bloc<PdfReaderEvent, PdfReaderState> {
         status: PdfReaderStatus.loading,
         errorMessage: null,
       ));
-      final String text = await extractTextUseCase.call(path: event.path);
+      final String text = await extractTextUseCase.call(bookId: event.bookId);
 
       emit(state.copyWith(
         status: PdfReaderStatus.success,

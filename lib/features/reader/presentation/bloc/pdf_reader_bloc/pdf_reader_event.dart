@@ -8,10 +8,10 @@ sealed class PdfReaderEvent extends Equatable {
 }
 
 final class PdfSelected extends PdfReaderEvent {
-  final String path;
+  final String bookId;
 
-  const PdfSelected({required this.path});
+  const PdfSelected({required this.bookId});
 
   @override
-  List<Object?> get props => [path];
+  List<Object?> get props => [bookId];
 }

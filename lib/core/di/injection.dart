@@ -14,7 +14,12 @@ import 'package:neuroloop/features/dashboard/domain/usecases/open_exact_alarm_se
 import 'package:neuroloop/features/dashboard/domain/usecases/request_notification_permission.dart';
 import 'package:neuroloop/features/dashboard/domain/usecases/schedule_alarm.dart';
 import 'package:neuroloop/features/dashboard/presentation/bloc/alarm_bloc.dart';
+import 'package:neuroloop/features/reader/data/database/app_database.dart';
+import 'package:neuroloop/features/reader/data/database/daos/books_dao.dart';
+import 'package:neuroloop/features/reader/data/datasources/books_local_data_source.dart';
+import 'package:neuroloop/features/reader/data/datasources/books_local_data_source_impl.dart';
 import 'package:neuroloop/features/reader/data/datasources/pdf_native_data_source.dart';
+import 'package:neuroloop/features/reader/data/repositories/books_repository_impl.dart';
 import 'package:neuroloop/features/reader/data/repositories/pdf_repository_impl.dart';
 import 'package:neuroloop/features/reader/data/utils/document_type_resolver.dart';
 import 'package:neuroloop/features/reader/domain/repository/books_repository.dart';
@@ -54,6 +59,10 @@ Future<void> configureCoreModule() async {
 
   getIt.registerLazySingleton<IdGenerator>(
     () => const UuidGenerator(),
+  );
+
+  getIt.registerLazySingleton<AppDatabase>(
+    AppDatabase.new,
   );
 }
 
@@ -118,17 +127,21 @@ void configureReaderModule() {
     () => const DocumentTypeResolver(),
   );
 
-  // getIt.registerLazySingleton<BooksLocalDataSource>(
-  //     () =>
-  // );
-  //
-  // getIt.registerLazySingleton<BooksRepository>(
-  //   () => BooksRepositoryImpl(
-  //     storage: getIt<AppStorage>(),
-  //     booksLocalDataSource: null,
-  //     idGenerator: null,
-  //   ),
-  // );
+  getIt.registerLazySingleton<BooksDao>(
+    () => BooksDao(getIt<AppDatabase>()),
+  );
+
+  getIt.registerLazySingleton<BooksLocalDataSource>(
+    () => BooksLocalDataSourceImpl(booksDao: getIt<BooksDao>()),
+  );
+
+  getIt.registerLazySingleton<BooksRepository>(
+    () => BooksRepositoryImpl(
+      storage: getIt<AppStorage>(),
+      booksLocalDataSource: getIt<BooksLocalDataSource>(),
+      idGenerator: getIt<IdGenerator>(),
+    ),
+  );
 
   getIt.registerFactory<ImportBookUseCase>(
     () => ImportBookUseCase(
@@ -154,12 +167,12 @@ void configureReaderModule() {
     () => PdfRepositoryImpl(dataSource: getIt<PdfNativeDataSource>()),
   );
 
-  getIt.registerFactory<ExtractTextUsecase>(
-    () => ExtractTextUsecase(repository: getIt<PdfRepository>()),
+  getIt.registerFactory<ExtractTextUseCase>(
+    () => ExtractTextUseCase(repository: getIt<PdfRepository>()),
   );
 
   getIt.registerFactory<PdfReaderBloc>(
-    () => PdfReaderBloc(extractTextUseCase: getIt<ExtractTextUsecase>()),
+    () => PdfReaderBloc(extractTextUseCase: getIt<ExtractTextUseCase>()),
   );
 
   getIt.registerFactory<BooksBloc>(
