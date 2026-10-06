@@ -21,10 +21,10 @@ final class ImportBookRequested extends BooksEvent {
 }
 
 final class DeleteBookRequested extends BooksEvent {
-  final String path;
+  final String bookId;
 
-  const DeleteBookRequested({required this.path});
+  const DeleteBookRequested({required this.bookId});
 
   @override
-  List<Object?> get props => [path];
+  List<Object?> get props => [bookId];
 }

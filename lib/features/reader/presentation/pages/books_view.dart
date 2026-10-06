@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:neuroloop/core/router/app_routes.dart';
 import 'package:neuroloop/design_system/loading/ds_loading.dart';
 import 'package:neuroloop/domain/extension/app_extension.dart';
 import 'package:neuroloop/features/reader/domain/entities/book.dart';
 import 'package:neuroloop/features/reader/presentation/bloc/books_bloc/books_bloc.dart';
-import 'package:neuroloop/features/reader/presentation/pages/widgets/thumbnail.dart';
+import 'package:neuroloop/features/reader/presentation/pages/widgets/book_item.dart';
 
 import '../../../../design_system/design_system.dart';
 
@@ -60,9 +59,9 @@ class _BooksViewState extends State<BooksView> {
     );
   }
 
-  Future<void> _deleteBook({required String path}) async {
+  Future<void> _deleteBook({required String bookId}) async {
     try {
-      if (path.isEmpty) {
+      if (bookId.isEmpty) {
         AppDialog.show(
           context: context,
           title: context.l10n.deleteBook,
@@ -78,7 +77,7 @@ class _BooksViewState extends State<BooksView> {
         );
       }
 
-      context.read<BooksBloc>().add(DeleteBookRequested(path: path));
+      context.read<BooksBloc>().add(DeleteBookRequested(bookId: bookId));
     } catch (e) {
       AppDialog.show(
         context: context,
@@ -112,12 +111,6 @@ class _BooksViewState extends State<BooksView> {
             final messenger = ScaffoldMessenger.of(context);
 
             if (state.status == BooksStatus.success) {
-              messenger.showSnackBar(
-                const SnackBar(
-                  content: Text('Book imported successfully.'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
             } else if (state.status == BooksStatus.failure && state.books.isNotEmpty) {
               messenger.showSnackBar(
                 SnackBar(
@@ -175,13 +168,13 @@ class _BooksViewState extends State<BooksView> {
 }
 
 class _BookList extends StatelessWidget {
+  final List<Book> books;
+  final ValueChanged<Book> onBookTap;
+
   const _BookList({
     required this.books,
     required this.onBookTap,
   });
-
-  final List<Book> books;
-  final ValueChanged<Book> onBookTap;
 
   @override
   Widget build(BuildContext context) {
@@ -197,100 +190,11 @@ class _BookList extends StatelessWidget {
       itemBuilder: (context, index) {
         final book = books[index];
 
-        return _BookCard(
+        return BookItem(
           book: book,
           onTap: () => onBookTap(book),
         );
       },
-    );
-  }
-}
-
-class _BookCard extends StatelessWidget {
-  const _BookCard({
-    required this.book,
-    required this.onTap,
-  });
-
-  final Book book;
-  final VoidCallback onTap;
-
-  String _getTitle({required String name}) {
-    final withoutExtension = name.replaceFirst(
-      RegExp(r'\.[^.]+$'),
-      '',
-    );
-
-    return withoutExtension.replaceAll(RegExp(r'[_\-,]+'), ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.all(12.r),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 100.w,
-                child: Thumbnail(
-                  path: book.fileName,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _getTitle(name: book.name),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    // Actions
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            // TODO: Implement
-                          },
-                          tooltip: 'Read',
-                          icon: const Icon(Icons.menu_book_outlined),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            // TODO: Implement
-                          },
-                          tooltip: 'More',
-                          icon: const Icon(Icons.more_vert),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            // TODO: Implement
-                          },
-                          tooltip: 'Delete',
-                          icon: const Icon(Icons.delete),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
