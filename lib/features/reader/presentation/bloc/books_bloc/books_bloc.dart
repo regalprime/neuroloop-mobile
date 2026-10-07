@@ -26,10 +26,13 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
     on<DeleteBookRequested>(_deleteBookRequested, transformer: droppable());
   }
 
-  Future<void> _deleteBookRequested(DeleteBookRequested event, Emitter<BooksState> emit) async {
+  Future<void> _deleteBookRequested(
+    DeleteBookRequested event,
+    Emitter<BooksState> emit,
+  ) async {
     emit(state.copyWith(status: BooksStatus.loading));
     try {
-      deleteBookUsecase.call(event.bookId);
+      deleteBookUsecase.call(bookId: event.bookId);
       final books = await getBookListUseCase();
       emit(state.copyWith(status: BooksStatus.success, books: books));
     } catch (e) {

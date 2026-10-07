@@ -54,5 +54,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get gotIt => 'Đã hiểu';
 
   @override
+  String get more => 'Xem thêm';
+
+  @override
+  String get read => 'Đọc';
+
+  @override
   String get minute => 'phút';
 }

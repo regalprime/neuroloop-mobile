@@ -7,5 +7,5 @@ abstract interface class BooksRepository {
 
   Future<List<Book>> getBookList();
 
-  Future<void> deleteBook(String path);
+  Future<void> deleteBook(String bookId);
 }
