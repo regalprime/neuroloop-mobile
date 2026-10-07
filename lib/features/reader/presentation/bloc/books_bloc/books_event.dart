@@ -28,3 +28,14 @@ final class DeleteBookRequested extends BooksEvent {
   @override
   List<Object?> get props => [bookId];
 }
+
+class BookThumbnailRequested extends BooksEvent {
+  final String bookId;
+
+  const BookThumbnailRequested({
+    required this.bookId,
+  });
+
+  @override
+  List<Object?> get props => [bookId];
+}

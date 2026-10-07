@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -64,13 +65,17 @@ class _BooksViewState extends State<BooksView> {
       context: context,
       title: context.l10n.deleteBook,
       content: Text(context.l10n.confirmDeleteBook),
-      actions: [
+      actions: (dialogContext) => [
         TextButton(
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () {
+            Navigator.of(dialogContext).pop(false);
+          },
           child: Text(context.l10n.cancel),
         ),
         FilledButton(
-          onPressed: () => Navigator.pop(context, true),
+          onPressed: () {
+            Navigator.of(dialogContext).pop(true);
+          },
           child: Text(context.l10n.delete),
         ),
       ],
@@ -137,6 +142,7 @@ class _BooksViewState extends State<BooksView> {
                     onDelete: (book) {
                       _deleteBook(bookId: book.id);
                     },
+                    thumbnails: state.thumbnails,
                   ),
                 ),
               ],
@@ -154,11 +160,13 @@ class _BooksViewState extends State<BooksView> {
 
 class _BookList extends StatelessWidget {
   final List<Book> books;
+  final Map<String, Uint8List?> thumbnails;
   final ValueChanged<Book> onBookTap;
   final ValueChanged<Book> onDelete;
 
   const _BookList({
     required this.books,
+    required this.thumbnails,
     required this.onBookTap,
     required this.onDelete,
   });
@@ -179,6 +187,7 @@ class _BookList extends StatelessWidget {
 
         return BookItem(
           book: book,
+          thumbnail: thumbnails[book.id],
           onTap: () => onBookTap(book),
           onDelete: () => onDelete(book),
         );

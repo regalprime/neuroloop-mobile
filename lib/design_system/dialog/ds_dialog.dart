@@ -10,17 +10,17 @@ class AppDialog extends StatelessWidget {
 
   final String title;
   final Widget content;
-  final List<Widget>? actions;
+  final List<Widget> Function(BuildContext context)? actions;
 
   static Future<T?> show<T>({
     required BuildContext context,
     required String title,
     required Widget content,
-    List<Widget>? actions,
+    List<Widget> Function(BuildContext context)? actions,
   }) {
     return showDialog<T>(
       context: context,
-      builder: (_) {
+      builder: (dialogContext) {
         return AppDialog(
           title: title,
           content: content,
@@ -35,7 +35,7 @@ class AppDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(title),
       content: content,
-      actions: actions,
+      actions: actions?.call(context),
     );
   }
 }

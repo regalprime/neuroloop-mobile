@@ -7,6 +7,6 @@ class GetBookListUseCase {
   const GetBookListUseCase({required this.readerRepository});
 
   Future<List<Book>> call() {
-    return readerRepository.getBookList();
+    return readerRepository.getBooks();
   }
 }

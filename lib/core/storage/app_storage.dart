@@ -20,14 +20,14 @@ class AppStorage {
     return booksDir;
   }
 
-  Future<File> saveFile({required File source, required String fileName}) async {
-    final booksDir = await booksDirectory();
+  Future<File> saveFile({required File sourceFile, required String fileName}) async {
+    final directory = await booksDirectory();
 
     final destination = File(
-      path.join(booksDir.path, fileName),
+      path.join(directory.path, fileName),
     );
 
-    return source.copy(destination.path);
+    return sourceFile.copy(destination.path);
   }
 
   Future<File> getFile(String fileName) async {
@@ -48,11 +48,5 @@ class AppStorage {
     final file = await getFile(fileName);
 
     return file.exists();
-  }
-
-  Future<String> bookFilePath(String fileName) async {
-    final directory = await booksDirectory();
-
-    return path.join(directory.path, fileName);
   }
 }

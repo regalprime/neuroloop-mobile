@@ -16,6 +16,8 @@ import 'package:neuroloop/features/dashboard/domain/usecases/schedule_alarm.dart
 import 'package:neuroloop/features/dashboard/presentation/bloc/alarm_bloc.dart';
 import 'package:neuroloop/features/reader/data/database/app_database.dart';
 import 'package:neuroloop/features/reader/data/database/daos/books_dao.dart';
+import 'package:neuroloop/features/reader/data/datasources/book_thumbnail_data_source.dart';
+import 'package:neuroloop/features/reader/data/datasources/book_thumbnail_data_source_impl.dart';
 import 'package:neuroloop/features/reader/data/datasources/books_local_data_source.dart';
 import 'package:neuroloop/features/reader/data/datasources/books_local_data_source_impl.dart';
 import 'package:neuroloop/features/reader/data/datasources/pdf_native_data_source.dart';
@@ -27,6 +29,7 @@ import 'package:neuroloop/features/reader/domain/repository/pdf_repository.dart'
 import 'package:neuroloop/features/reader/domain/usecases/delete_book_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/extract_text_usecase.dart';
 import 'package:neuroloop/features/reader/domain/usecases/get_book_list_usecase.dart';
+import 'package:neuroloop/features/reader/domain/usecases/get_book_thumbnail_use_case.dart';
 import 'package:neuroloop/features/reader/domain/usecases/import_book_usecase.dart';
 import 'package:neuroloop/features/reader/presentation/bloc/books_bloc/books_bloc.dart';
 import 'package:neuroloop/features/reader/presentation/bloc/pdf_reader_bloc/pdf_bloc.dart';
@@ -127,6 +130,17 @@ void configureReaderModule() {
     () => const DocumentTypeResolver(),
   );
 
+  getIt.registerLazySingleton<BookThumbnailDataSource>(
+    () => BookThumbnailDataSourceImpl(),
+  );
+
+  getIt.registerFactory<GetBookThumbnailUseCase>(
+    () => GetBookThumbnailUseCase(
+      repository: getIt<BooksRepository>(),
+      bookThumbnailDataSource: getIt<BookThumbnailDataSource>(),
+    ),
+  );
+
   getIt.registerLazySingleton<BooksDao>(
     () => BooksDao(getIt<AppDatabase>()),
   );
@@ -179,7 +193,8 @@ void configureReaderModule() {
     () => BooksBloc(
       importBookUseCase: getIt<ImportBookUseCase>(),
       getBookListUseCase: getIt<GetBookListUseCase>(),
-      deleteBookUsecase: getIt<DeleteBookUsecase>(),
+      deleteBookUseCase: getIt<DeleteBookUsecase>(),
+      getBookThumbnailUseCase: getIt<GetBookThumbnailUseCase>(),
     ),
   );
 }

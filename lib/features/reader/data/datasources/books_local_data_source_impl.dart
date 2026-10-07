@@ -4,11 +4,9 @@ import 'package:neuroloop/features/reader/data/datasources/books_local_data_sour
 import 'package:neuroloop/features/reader/domain/entities/book.dart';
 
 class BooksLocalDataSourceImpl implements BooksLocalDataSource {
-  const BooksLocalDataSourceImpl({
-    required this.booksDao,
-  });
-
   final BooksDao booksDao;
+
+  const BooksLocalDataSourceImpl({required this.booksDao});
 
   @override
   Future<void> insertBook(Book book) {

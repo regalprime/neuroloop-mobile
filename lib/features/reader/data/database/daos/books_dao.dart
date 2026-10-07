@@ -8,8 +8,14 @@ part 'books_dao.g.dart';
 class BooksDao extends DatabaseAccessor<AppDatabase> with _$BooksDaoMixin {
   BooksDao(super.attachedDatabase);
 
-  Future<void> insertBook(BooksCompanion book) {
-    return into(books).insert(book);
+  Future<void> insertBook(BooksCompanion companion) {
+    return into(books).insert(companion);
+  }
+
+  Future<BookRecord?> getBookById(String id) {
+    final query = select(books)..where((book) => book.id.equals(id));
+
+    return query.getSingleOrNull();
   }
 
   Future<List<BookRecord>> getBooks() {
@@ -22,12 +28,6 @@ class BooksDao extends DatabaseAccessor<AppDatabase> with _$BooksDaoMixin {
       ]);
 
     return query.get();
-  }
-
-  Future<BookRecord?> getBookById(String id) {
-    final query = select(books)..where((book) => book.id.equals(id));
-
-    return query.getSingleOrNull();
   }
 
   Future<int> deleteBook(String id) {
@@ -44,11 +44,5 @@ class BooksDao extends DatabaseAccessor<AppDatabase> with _$BooksDaoMixin {
       ]);
 
     return query.watch();
-  }
-
-  Future<bool> exists(String id) async {
-    final book = await getBookById(id);
-
-    return book != null;
   }
 }

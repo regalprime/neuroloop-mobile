@@ -25,25 +25,31 @@ class BooksRepositoryImpl implements BooksRepository {
 
     final fileName = '$id$fileExtension';
 
-    final saveFile = await storage.saveFile(source: file, fileName: fileName);
+    final saveFile = await storage.saveFile(sourceFile: file, fileName: fileName);
 
-    final stat = await saveFile.stat();
+    try {
+      final stat = await saveFile.stat();
 
-    final book = Book(
-      id: id,
-      name: path.basename(file.path),
-      fileName: fileName,
-      size: stat.size,
-      importedAt: DateTime.now(),
-    );
+      final book = Book(
+        id: id,
+        name: path.basenameWithoutExtension(file.path),
+        fileName: fileName,
+        size: stat.size,
+        importedAt: DateTime.now(),
+      );
 
-    await booksLocalDataSource.insertBook(book);
+      await booksLocalDataSource.insertBook(book);
 
-    return book;
+      return book;
+    } catch (e) {
+      await storage.deleteFile(fileName);
+
+      rethrow;
+    }
   }
 
   @override
-  Future<List<Book>> getBookList() {
+  Future<List<Book>> getBooks() {
     return booksLocalDataSource.getBooks();
   }
 
@@ -54,5 +60,29 @@ class BooksRepositoryImpl implements BooksRepository {
 
     await storage.deleteFile(book.fileName);
     await booksLocalDataSource.deleteBook(bookId);
+  }
+
+  @override
+  Future<Book?> getBook(String bookId) {
+    return booksLocalDataSource.getBookById(bookId);
+  }
+
+  @override
+  Future<File?> getBookFile(String bookId) async {
+    final book = await booksLocalDataSource.getBookById(bookId);
+
+    if (book == null) return null;
+
+    final file = await storage.getFile(book.fileName);
+
+    if (!await file.exists()) {
+      return null;
+    }
+    return file;
+  }
+
+  @override
+  Stream<List<Book>> watchBooks() {
+    return booksLocalDataSource.watchBooks();
   }
 }
