@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:neuroloop/domain/extension/app_extension.dart';
 import 'package:neuroloop/features/reader/domain/entities/book.dart';
 import 'package:neuroloop/features/reader/presentation/pages/widgets/thumbnail.dart';
 
 class BookItem extends StatelessWidget {
   final Book book;
   final VoidCallback onTap;
+  final VoidCallback onDelete;
 
   const BookItem({
     super.key,
     required this.book,
     required this.onTap,
+    required this.onDelete,
   });
 
   String _getTitle({required String name}) {
@@ -60,22 +63,18 @@ class BookItem extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {
-                            // TODO: Implement
-                          },
-                          tooltip: 'Read',
+                          onPressed: () {},
+                          tooltip: context.l10n.read,
                           icon: const Icon(Icons.menu_book_outlined),
                         ),
                         IconButton(
-                          onPressed: () {
-                            // TODO: Implement
-                          },
-                          tooltip: 'More',
+                          onPressed: () {},
+                          tooltip: context.l10n.more,
                           icon: const Icon(Icons.more_vert),
                         ),
                         IconButton(
-                          onPressed: () {},
-                          tooltip: 'Delete',
+                          onPressed: onDelete,
+                          tooltip: context.l10n.delete,
                           icon: const Icon(Icons.delete),
                         ),
                       ],

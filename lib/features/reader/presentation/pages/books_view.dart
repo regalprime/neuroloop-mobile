@@ -60,43 +60,25 @@ class _BooksViewState extends State<BooksView> {
   }
 
   Future<void> _deleteBook({required String bookId}) async {
-    try {
-      if (bookId.isEmpty) {
-        AppDialog.show(
-          context: context,
-          title: context.l10n.deleteBook,
-          content: Text(context.l10n.confirmDeleteBook),
-          actions: [
-            FilledButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(context.l10n.gotIt),
-            ),
-          ],
-        );
-      }
+    final confirmed = await AppDialog.show<bool>(
+      context: context,
+      title: context.l10n.deleteBook,
+      content: Text(context.l10n.confirmDeleteBook),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(context.l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: Text(context.l10n.delete),
+        ),
+      ],
+    );
 
-      context.read<BooksBloc>().add(DeleteBookRequested(bookId: bookId));
-    } catch (e) {
-      AppDialog.show(
-        context: context,
-        title: context.l10n.deleteBook,
-        content: Text(context.l10n.confirmDeleteBook),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(context.l10n.delete),
-          ),
-        ],
-      );
-    }
+    if (confirmed != true || !mounted) return;
+
+    context.read<BooksBloc>().add(DeleteBookRequested(bookId: bookId));
   }
 
   @override
@@ -152,6 +134,9 @@ class _BooksViewState extends State<BooksView> {
                   child: _BookList(
                     books: state.books,
                     onBookTap: _openBook,
+                    onDelete: (book) {
+                      _deleteBook(bookId: book.id);
+                    },
                   ),
                 ),
               ],
@@ -170,10 +155,12 @@ class _BooksViewState extends State<BooksView> {
 class _BookList extends StatelessWidget {
   final List<Book> books;
   final ValueChanged<Book> onBookTap;
+  final ValueChanged<Book> onDelete;
 
   const _BookList({
     required this.books,
     required this.onBookTap,
+    required this.onDelete,
   });
 
   @override
@@ -193,6 +180,7 @@ class _BookList extends StatelessWidget {
         return BookItem(
           book: book,
           onTap: () => onBookTap(book),
+          onDelete: () => onDelete(book),
         );
       },
     );

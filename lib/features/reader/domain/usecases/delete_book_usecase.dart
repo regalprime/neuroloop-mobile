@@ -5,7 +5,7 @@ class DeleteBookUsecase {
 
   const DeleteBookUsecase({required this.repository});
 
-  Future<void> call(String path) {
-    return repository.deleteBook(path);
+  Future<void> call({required String bookId}) {
+    return repository.deleteBook(bookId);
   }
 }
