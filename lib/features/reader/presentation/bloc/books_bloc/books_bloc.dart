@@ -128,8 +128,8 @@ class BooksBloc extends Bloc<BooksEvent, BooksState> {
   ) async {
     emit(state.copyWith(status: BooksStatus.loading));
     try {
-      await importBookUseCase(event.file);
-
+      final book = await importBookUseCase(event.file);
+      add(BookThumbnailRequested(bookId: book.id));
       final books = await getBookListUseCase();
 
       emit(

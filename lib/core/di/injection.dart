@@ -178,7 +178,10 @@ void configureReaderModule() {
   );
 
   getIt.registerLazySingleton<PdfRepository>(
-    () => PdfRepositoryImpl(dataSource: getIt<PdfNativeDataSource>()),
+    () => PdfRepositoryImpl(
+      dataSource: getIt<PdfNativeDataSource>(),
+      booksRepository: getIt<BooksRepository>(),
+    ),
   );
 
   getIt.registerFactory<ExtractTextUseCase>(

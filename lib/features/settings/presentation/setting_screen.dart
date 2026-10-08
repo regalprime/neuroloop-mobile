@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:neuroloop/core/router/app_routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neuroloop/core/localization/supported_languages.dart';
+import 'package:neuroloop/core/theme/bloc/theme_bloc.dart';
+import 'package:neuroloop/core/theme/theme_registry.dart';
+
+import '../../../core/localization/bloc/language_bloc.dart' show LanguageBloc, LanguageState, LanguageChanged;
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -8,27 +12,54 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-                context.push(AppRoutes.theme);
-              },
-              child: Text('Settings content goes here'),
-            ),
-            const SizedBox(height: 50),
-            GestureDetector(
-              onTap: () {
-                context.push(AppRoutes.language);
-              },
-              child: Text('Settings content goes here'),
-            ),
-          ],
-        ),
+      body: ListView(
+        children: [
+          BlocBuilder<ThemeBloc, ThemeState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  for (final theme in ThemeRegistry.all)
+                    RadioListTile<String>(
+                      title: Text(theme.label),
+                      value: theme.id,
+                      groupValue: state.theme.id,
+                      onChanged: (id) {
+                        if (id == null) return;
+
+                        context.read<ThemeBloc>().add(ThemeChanged(themeId: id));
+                      },
+                    ),
+                ],
+              );
+            },
+          ),
+          BlocBuilder<LanguageBloc, LanguageState>(
+            builder: (context, state) {
+              return Column(
+                children: [
+                  for (final language in AppLanguage.values)
+                    RadioListTile<AppLanguage>(
+                      title: Text(
+                        switch (language) {
+                          AppLanguage.vietnamese => 'Tiếng Việt',
+                          AppLanguage.english => 'English',
+                        },
+                      ),
+                      value: language,
+                      groupValue: state.language,
+                      onChanged: (language) {
+                        if (language == null) {
+                          return;
+                        }
+
+                        context.read<LanguageBloc>().add(LanguageChanged(language: language));
+                      },
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
